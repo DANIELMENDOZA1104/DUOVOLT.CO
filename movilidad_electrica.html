@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoVolt - Movilidad Eléctrica</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f7fb;
+  color:#111827;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ========================= */
+/* NAVBAR                    */
+/* ========================= */
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+  padding:16px 55px;
+  background:rgba(2,8,23,.95);
+  backdrop-filter:blur(10px);
+}
+
+.nav-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo img{ height:42px; }
+
+.menu{
+  display:flex;
+  gap:35px;
+  align-items:center;
+}
+
+.menu a{
+  text-decoration:none;
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  transition:.3s;
+}
+
+.menu a:hover,
+.menu .activo{ color:#5fd13f; }
+
+.btn-nav{
+  background:#5fd13f;
+  color:white;
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn-nav:hover{ background:#4cad36; }
+
+/* DROPDOWN */
+
+.dropdown-wrap{ position:relative; }
+
+.dropdown-btn{
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:none;
+  border:none;
+  font-family:Arial,sans-serif;
+  padding:0;
+  transition:.3s;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn.open{ color:#5fd13f; }
+
+.dropdown-btn .arrow{
+  font-size:10px;
+  display:inline-block;
+  transition:transform .25s;
+}
+
+.dropdown-btn.open .arrow{ transform:rotate(180deg); }
+
+.dropdown{
+  position:absolute;
+  top:calc(100% + 20px);
+  left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  background:white;
+  border-radius:16px;
+  padding:10px;
+  width:340px;
+  box-shadow:0 12px 40px rgba(0,0,0,.15);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+  z-index:999;
+}
+
+.dropdown.visible{
+  opacity:1;
+  pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+
+.dd-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .15s;
+}
+
+.dd-item:hover{ background:#f0faea; }
+
+.dd-icon{
+  width:38px;
+  height:38px;
+  background:#eaf7e4;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.dd-icon img{ width:22px; }
+
+.dd-label{
+  font-size:13px;
+  font-weight:700;
+  color:#111827;
+}
+
+.dd-sub{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  line-height:1.5;
+}
+
+.dd-sep{
+  height:1px;
+  background:#f3f4f6;
+  margin:4px 0;
+}
+
+/* ========================= */
+/* HAMBURGER                 */
+/* ========================= */
+
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  padding:4px;
+}
+
+.hamburger span{
+  display:block;
+  width:24px;
+  height:2px;
+  background:white;
+  border-radius:2px;
+  transition:.3s;
+}
+
+.hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ========================= */
+/* MENÚ MÓVIL PANTALLA       */
+/* COMPLETA OSCURA           */
+/* ========================= */
+
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(2,8,23,.98);
+  z-index:99;
+  padding:90px 28px 40px;
+  flex-direction:column;
+  gap:0;
+  overflow-y:auto;
+}
+
+.mobile-menu.open{ display:flex; }
+
+.mobile-menu a{
+  text-decoration:none;
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+
+.mobile-menu a:hover{ color:#5fd13f; }
+
+.mobile-menu .mobile-services-title{
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  padding:20px 0 8px;
+}
+
+.mobile-menu .mobile-cta{
+  margin-top:28px;
+  background:#5fd13f;
+  color:white;
+  text-align:center;
+  padding:16px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:700;
+  border-bottom:none;
+}
+
+.mobile-menu .mobile-cta:hover{
+  background:#4cad36;
+  color:white;
+}
+
+/* ========================= */
+/* IMAGEN MÓVIL (oculta en escritorio) */
+/* ========================= */
+
+.hero-img-wrap{ display:none; }
+
+/* ========================= */
+/* MAIN                      */
+/* ========================= */
+
+.main{
+  position:relative;
+  padding:90px 50px 40px;
+  overflow:hidden;
+  flex:1;
+}
+
+/* FONDO DIFUMINADO ESCRITORIO */
+
+.bg-fade{
+  position:absolute;
+  top:0;
+  left:0;
+  width:66%;
+  height:980px;
+  background:
+    linear-gradient(to right,
+    rgba(245,247,251,0) 15%,
+    rgba(245,247,251,.18) 30%,
+    rgba(245,247,251,.45) 45%,
+    rgba(245,247,251,.78) 55%,
+    rgba(245,247,251,.94) 70%,
+    #f5f7fb 100%),
+    url("recursos/carro.png");
+  background-size:cover;
+  background-position:22% center;
+  border-radius:0 0 40px 0;
+  z-index:0;
+}
+
+/* GRID */
+
+.grid{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:42% 58%;
+  gap:20px;
+  align-items:start;
+}
+
+.left-space{ min-height:780px; }
+
+/* RETIE */
+
+.retie{
+  background:white;
+  border:2px solid #8ad06a;
+  border-radius:22px;
+  padding:22px 26px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:26px;
+}
+
+.retie-left{
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+
+.retie-left img{ width:62px; }
+
+.retie-text small{
+  color:#374151;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+.retie-text h2{
+  font-size:38px;
+  line-height:1.1;
+  margin:8px 0 12px;
+  font-weight:800;
+}
+
+.verde{ color:#5fd13f; }
+
+.retie-text p{
+  color:#475569;
+  font-size:15px;
+  line-height:1.7;
+  max-width:700px;
+}
+
+.retie-side{
+  border-left:1px solid #dbe2ea;
+  padding-left:24px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+
+.retie-side img{ width:70px; }
+
+.retie-side p{
+  font-size:14px;
+  line-height:1.6;
+  max-width:160px;
+}
+
+/* HERO */
+
+.hero-right-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:28px;
+}
+
+.hero-text{ flex:1; }
+
+.hero-text h4{
+  color:#65c946;
+  font-size:14px;
+  margin-bottom:14px;
+  font-weight:700;
+}
+
+.hero-text h1{
+  font-size:40px;
+  line-height:1.08;
+  font-weight:800;
+  max-width:620px;
+}
+
+.hero-desc{
+  width:230px;
+  border-left:1px solid #dbe2ea;
+  padding-left:26px;
+  margin-top:8px;
+}
+
+.hero-desc p{
+  font-size:14px;
+  line-height:1.8;
+  color:#374151;
+}
+
+/* ICON GRID */
+
+.icon-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  margin-top:32px;
+  border-top:1px solid #e5e7eb;
+}
+
+.icon-item{
+  text-align:center;
+  padding:24px 12px;
+  border-right:1px solid #e5e7eb;
+}
+
+.icon-item:last-child{ border-right:none; }
+
+.icon-item img{
+  width:42px;
+  margin-bottom:12px;
+}
+
+.icon-item p{
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* CARDS */
+
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+  margin-top:22px;
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 5px 18px rgba(0,0,0,.05);
+  display:flex;
+  flex-direction:column;
+}
+
+.card-flex{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  flex:1;
+}
+
+.card-img-wrap{
+  width:85px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:110px;
+}
+
+.card-img-wrap img{
+  width:100%;
+  object-fit:contain;
+}
+
+.cargador-ac{
+  transform:scale(1.5);
+}
+
+.card h3{
+  color:#65c946;
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.card h2{
+  font-size:28px;
+  margin-bottom:12px;
+}
+
+.card p{
+  color:#4b5563;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.power{
+  margin-top:18px;
+  display:inline-block;
+  border:1px solid #cde7c1;
+  padding:9px 15px;
+  border-radius:12px;
+  color:#6ba94f;
+  font-weight:600;
+  font-size:13px;
+}
+
+/* BRANDS */
+
+.brands h3{
+  font-size:15px;
+  line-height:1.6;
+  margin-bottom:22px;
+}
+
+.brands-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  align-items:center;
+}
+
+.brands-grid img{
+  width:100%;
+  max-width:72px;
+  filter:grayscale(100%);
+}
+
+/* BENEFITS */
+
+.benefits{
+  position:relative;
+  z-index:2;
+  background:white;
+  border-radius:22px;
+  margin-top:28px;
+  padding:28px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:22px;
+  box-shadow:0 5px 18px rgba(0,0,0,.04);
+}
+
+.benefit{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+
+.benefit img{
+  width:38px;
+  height:38px;
+  flex-shrink:0;
+  filter:brightness(0) saturate(100%) invert(63%) sepia(70%) saturate(463%) hue-rotate(53deg);
+}
+
+.benefit h4{
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.benefit p{
+  color:#4b5563;
+  line-height:1.6;
+  font-size:13px;
+}
+
+/* CTA */
+
+.cta{
+  position:relative;
+  z-index:2;
+  margin-top:24px;
+  background:linear-gradient(to right, #020817, #031427, #020817);
+  border-radius:22px;
+  padding:32px 38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.cta-left{
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+
+.cta-left img{ width:70px; }
+
+.cta-left h3{
+  color:white;
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.cta-left p{
+  color:#d1d5db;
+  font-size:16px;
+}
+
+.cta-btn{
+  border:1px solid #5fd13f;
+  color:#5fd13f;
+  padding:16px 30px;
+  border-radius:14px;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:600;
+  transition:.3s;
+  cursor:pointer;
+  background:none;
+  white-space:nowrap;
+}
+
+.cta-btn:hover{
+  background:#5fd13f;
+  color:#02110a;
+}
+
+/* ── FOOTER ── */
+
+.footer{
+  background:#020817;
+  color:#cbd5e1;
+  padding:48px 55px 24px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:36px;
+  border-bottom:1px solid #1e293b;
+}
+
+.footer-brand p{
+  font-size:13px;
+  line-height:1.8;
+  color:#94a3b8;
+  margin-top:14px;
+  max-width:240px;
+}
+
+.footer-brand .brand-name{
+  font-size:20px;
+  font-weight:900;
+  color:white;
+  letter-spacing:1px;
+}
+
+.footer-brand .brand-name span{ color:#63c53f; }
+
+.footer-brand .tagline{
+  font-size:11px;
+  color:#64748b;
+  margin-top:2px;
+}
+
+.footer-col h4{
+  color:white;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:16px;
+  letter-spacing:.5px;
+}
+
+.footer-col a{
+  display:block;
+  color:#94a3b8;
+  text-decoration:none;
+  font-size:13px;
+  margin-bottom:10px;
+  transition:.2s;
+}
+
+.footer-col a:hover{ color:#63c53f; }
+
+.footer-col .contact-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:#94a3b8;
+  line-height:1.6;
+}
+
+.footer-col .contact-item svg{
+  flex-shrink:0;
+  margin-top:2px;
+  color:#63c53f;
+}
+
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:22px;
+  font-size:12px;
+  color:#475569;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.footer-bottom a{
+  color:#475569;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.footer-bottom a:hover{ color:#63c53f; }
+
+/* MODAL */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,8,23,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9999;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+
+.modal-box{
+  width:92%;
+  max-width:520px;
+  background:white;
+  border-radius:26px;
+  padding:38px 34px;
+  position:relative;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.close-modal{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  background:#eef2f7;
+  font-size:22px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  padding:0;
+}
+
+.modal-box h2{
+  font-size:34px;
+  color:#0f172a;
+  margin-bottom:12px;
+}
+
+.modal-box p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:28px;
+}
+
+.modal-box form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:16px;
+  font-size:15px;
+  outline:none;
+  background:white;
+  color:#475569;
+}
+
+.modal-box textarea{
+  min-height:130px;
+  resize:none;
+}
+
+.modal-box button[type="submit"]{
+  background:#63c53f;
+  color:white;
+  border:none;
+  border-radius:14px;
+  padding:17px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ======================================================= */
+/* RESPONSIVE                                              */
+/* ======================================================= */
+
+/* TABLET (≤900px) */
+@media(max-width:900px){
+
+  .navbar{ padding:14px 28px; }
+
+  .menu,
+  .btn-nav{ display:none; }
+
+  .hamburger{ display:flex; }
+
+  /* Imagen con fade — visible en móvil */
+  .hero-img-wrap{
+    display:block;
+    position:relative;
+    width:100%;
+    height:260px;
+    overflow:hidden;
+  }
+
+  .hero-img-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+    display:block;
+  }
+
+  .hero-img-wrap::after{
+    content:'';
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:120px;
+    background:linear-gradient(to bottom, transparent 0%, #f5f7fb 100%);
+    pointer-events:none;
+  }
+
+  /* Ocultar fondo CSS y grid de escritorio */
+  .bg-fade{ display:none; }
+
+  .grid{ display:block; }
+
+  .left-space{ display:none; }
+
+  .main{
+    padding:0 0 32px;
+  }
+
+  .main > .grid,
+  .main > .benefits,
+  .main > .cta{
+    padding:0 18px;
+  }
+
+  .main > .grid{ padding-top:16px; }
+
+  /* RETIE */
+
+  .retie{
+    flex-direction:column;
+    gap:18px;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:20px;
+  }
+
+  .retie-left{ gap:14px; }
+
+  .retie-left img{ width:44px; }
+
+  .retie-text small{ font-size:10px; }
+
+  .retie-text h2{
+    font-size:26px;
+    margin:6px 0 8px;
+  }
+
+  .retie-text p{
+    font-size:13px;
+    line-height:1.6;
+  }
+
+  .retie-side{
+    border-left:none;
+    border-top:1px solid #dbe2ea;
+    padding-left:0;
+    padding-top:16px;
+    width:100%;
+    justify-content:center;
+  }
+
+  .retie-side img{ width:48px; }
+
+  .retie-side p{
+    font-size:13px;
+    max-width:200px;
+  }
+
+  /* HERO TEXT */
+
+  .hero-right-top{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .hero-text h4{
+    font-size:11px;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+
+  .hero-text h1{
+    font-size:26px;
+    line-height:1.2;
+    max-width:100%;
+  }
+
+  .hero-desc{
+    width:100%;
+    border-left:none;
+    border-top:1px solid #e5e7eb;
+    padding-left:0;
+    padding-top:14px;
+    margin-top:0;
+  }
+
+  .hero-desc p{
+    font-size:13px;
+    color:#475569;
+  }
+
+  /* ICON GRID 2x2 */
+
+  .icon-grid{
+    grid-template-columns:repeat(2,1fr);
+    margin-top:22px;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    overflow:hidden;
+  }
+
+  .icon-item{
+    padding:16px 10px;
+    border-right:1px solid #e5e7eb;
+    border-bottom:1px solid #e5e7eb;
+  }
+
+  .icon-item:nth-child(2),
+  .icon-item:nth-child(4){ border-right:none; }
+
+  .icon-item:nth-child(3),
+  .icon-item:nth-child(4){ border-bottom:none; }
+
+  .icon-item img{
+    width:32px;
+    margin-bottom:8px;
+  }
+
+  .icon-item p{ font-size:12px; }
+
+  /* CARDS — apiladas */
+
+  .cards{
+    grid-template-columns:1fr;
+    gap:14px;
+    margin-top:18px;
+  }
+
+  .card{
+    border-radius:16px;
+    padding:18px;
+  }
+
+  .card-flex{
+    gap:14px;
+    align-items:center;
+  }
+
+  .card-img-wrap{
+    width:70px;
+    min-height:80px;
+  }
+
+  .cargador-ac{
+    transform:scale(1.3);
+  }
+
+  .card h3{
+    font-size:13px;
+    margin-bottom:6px;
+  }
+
+  .card h2{
+    font-size:22px;
+    margin-bottom:8px;
+  }
+
+  .card p{ font-size:13px; }
+
+  .power{
+    margin-top:12px;
+    padding:7px 12px;
+    font-size:12px;
+  }
+
+  .brands h3{
+    font-size:14px;
+    margin-bottom:16px;
+  }
+
+  .brands-grid{
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+
+  .brands-grid img{ max-width:100%; }
+
+  /* BENEFITS — 2 columnas */
+
+  .benefits{
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    padding:20px 18px;
+    border-radius:18px;
+    margin-top:18px;
+  }
+
+  .benefit:last-child{
+    grid-column:1 / -1;
+    max-width:50%;
+  }
+
+  .benefit img{
+    width:30px;
+    height:30px;
+  }
+
+  .benefit h4{
+    font-size:13px;
+    margin-bottom:5px;
+  }
+
+  .benefit p{
+    font-size:12px;
+    line-height:1.5;
+  }
+
+  /* ── CTA MÓVIL ── */
+
+  .cta{
+    flex-direction:column;
+    gap:22px;
+    padding:28px 22px;
+    border-radius:18px;
+    text-align:center;
+    margin-top:18px;
+    align-items:center;
+  }
+
+  .cta-left{
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    width:100%;
+  }
+
+  .cta-left img{ width:52px; }
+
+  .cta-left h3{
+    font-size:20px;
+    line-height:1.3;
+  }
+
+  .cta-left p{ font-size:14px; }
+
+  /* BOTÓN — ancho completo, nunca se corta */
+  .cta-btn{
+    width:100%;
+    text-align:center;
+    padding:16px 20px;
+    font-size:15px;
+    border-radius:14px;
+    box-sizing:border-box;
+  }
+
+  /* Footer */
+
+  .footer{ padding:40px 20px 20px; }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:30px; }
+  .footer-bottom{ flex-direction:column; align-items:flex-start; }
+
+}
+
+/* MÓVIL (≤640px) */
+@media(max-width:640px){
+
+  .navbar{ padding:14px 20px; }
+
+  .hero-img-wrap{ height:220px; }
+
+  .modal-box{ padding:28px 20px; border-radius:20px; }
+  .modal-box h2{ font-size:26px; }
+
+}
+
+/* MÓVIL PEQUEÑO (≤400px) */
+@media(max-width:400px){
+
+  .hero-text h1{ font-size:22px; }
+
+  .benefit:last-child{ max-width:100%; }
+
+  .footer-grid{ grid-template-columns:1fr; }
+
+}
+
+</style>
+</head>
+<link rel="icon" href="recursos/logo.png">
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="recursos/logo.png" alt="DuoVolt">
+    </div>
+
+    <div class="menu">
+      <a href="index.html">Inicio</a>
+
+      <div class="dropdown-wrap">
+        <button class="dropdown-btn" id="svcBtn">
+          Servicios <span class="arrow">▼</span>
+        </button>
+
+        <div class="dropdown" id="ddMenu">
+
+          <a class="dd-item" href="energia_solar.html">
+            <div class="dd-icon"><img src="recursos/vivienda.png"></div>
+            <div>
+              <div class="dd-label">Energía solar</div>
+              <div class="dd-sub">Reduce tu factura hasta llegar a 0 o generar excedentes de energía.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="movilidad_electrica.html">
+            <div class="dd-icon"><img src="recursos/tienda.png"></div>
+            <div>
+              <div class="dd-label">Movilidad Eléctrica</div>
+              <div class="dd-sub">Infraestructura de carga para hogares, empresas y parqueaderos.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="beneficios_tributarios.html">
+            <div class="dd-icon"><img src="recursos/autopista.png"></div>
+            <div>
+              <div class="dd-label">Beneficios tributarios</div>
+              <div class="dd-sub">Optimiza tu inversión con incentivos y deducciones energéticas.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="generacion_escala.html">
+            <div class="dd-icon"><img src="recursos/estructura.png"></div>
+            <div>
+              <div class="dd-label">Generación a gran escala</div>
+              <div class="dd-sub">Desarrollo de proyectos energéticos desde 2 hectáreas.</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <a href="https://wa.me/573127133308" target="_blank" class="btn-nav">
+      Escribenos →
+    </a>
+
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</header>
+
+<!--MÓVIL-->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <div class="mobile-services-title">SERVICIOS</div>
+  <a href="energia_solar.html">☀️ Energía Solar</a>
+  <a href="movilidad_electrica.html" style="color:#5fd13f;">⚡ Movilidad Eléctrica</a>
+  <a href="beneficios_tributarios.html">📋 Beneficios Tributarios</a>
+  <a href="generacion_escala.html">🌿 Generación a Gran Escala</a>
+  <a href="nosotros.html">Nosotros</a>
+  <a href="https://wa.me/573127133308" target="_blank" class="mobile-cta">Escribenos →</a>
+</nav>
+
+<!-- IMAGEN MÓVIL con fade -->
+<div class="hero-img-wrap">
+  <img src="recursos/carro.png" alt="Movilidad eléctrica DuoVolt">
+</div>
+
+<!-- MAIN -->
+<section class="main">
+
+  <div class="bg-fade"></div>
+
+  <div class="grid">
+
+    <div class="left-space"></div>
+
+    <div>
+
+      <!-- RETIE -->
+      <div class="retie">
+        <div class="retie-left">
+          <img src="recursos/escudo.png" alt="">
+          <div class="retie-text">
+            <small>INSTALACIONES SEGURAS, CERTIFICADAS Y CONFIABLES</small>
+            <h2>Cumplimos con el <span class="verde">RETIE</span></h2>
+            <p>Todas nuestras instalaciones cumplen con el Reglamento Técnico de Instalaciones Eléctricas y normas técnicas colombianas.</p>
+          </div>
+        </div>
+        <div class="retie-side">
+          <img src="recursos/documento.png" alt="">
+          <p>Seguridad que te conecta con tranquilidad.</p>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="hero-right-top">
+        <div class="hero-text">
+          <h4>MOVILIDAD ELÉCTRICA</h4>
+          <h1>
+            Cargamos tu mundo
+            de energía <span class="verde">hoy</span>,
+            para el <span class="verde">mañana.</span>
+          </h1>
+        </div>
+        <div class="hero-desc">
+          <p>Instalamos cargadores eléctricos inteligentes en donde los necesites.</p>
+        </div>
+      </div>
+
+      <!-- ICONOS -->
+      <div class="icon-grid">
+        <div class="icon-item">
+          <img src="recursos/vivienda.png" alt="">
+          <p>Hogares y apartamentos</p>
+        </div>
+        <div class="icon-item">
+          <img src="recursos/tienda.png" alt="">
+          <p>Comercios y empresas</p>
+        </div>
+        <div class="icon-item">
+          <img src="recursos/autopista.png" alt="">
+          <p>Vías y espacios públicos</p>
+        </div>
+        <div class="icon-item">
+          <img src="recursos/estructura.png" alt="">
+          <p>Parqueaderos y conjuntos</p>
+        </div>
+      </div>
+
+      <!-- CARDS -->
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-flex">
+            <div class="card-img-wrap">
+              <img src="recursos/economica.png" class="cargador-ac" alt="Cargador AC">
+            </div>
+            <div>
+              <h3>Carga lenta</h3>
+              <h2>AC</h2>
+              <p>Ideal para el hogar y carga nocturna.</p>
+              <div class="power">3.7 kW – 7.4 kW</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-flex">
+            <div class="card-img-wrap">
+              <img src="recursos/caro.png" alt="Cargador DC">
+            </div>
+            <div>
+              <h3>Carga rápida</h3>
+              <h2>DC</h2>
+              <p>Ideal para comercios y vías de uso intensivo.</p>
+              <div class="power">30 kW – 120 kW+</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card brands">
+          <h3>Conectamos con las <span class="verde">mejores marcas</span></h3>
+          <div class="brands-grid">
+            <img src="recursos/tesla.png" alt="Tesla">
+            <img src="recursos/bmw.png" alt="BMW">
+            <img src="recursos/byd.png" alt="BYD">
+            <img src="recursos/kia.png" alt="Kia">
+            <img src="recursos/hyundai.png" alt="Hyundai">
+            <img src="recursos/audi.png" alt="Audi">
+            <img src="recursos/volvo.png" alt="Volvo">
+            <img src="recursos/nissan.png" alt="Nissan">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="benefits">
+
+    <div class="benefit">
+      <img src="recursos/escudo.png" alt="">
+      <div>
+        <h4>Cumplimos RETIE</h4>
+        <p>Instalaciones seguras, certificadas y aprobadas.</p>
+      </div>
+    </div>
+
+    <div class="benefit">
+      <img src="recursos/escudo.png" alt="">
+      <div>
+        <h4>Equipos certificados</h4>
+        <p>Trabajamos con cargadores de alta calidad y garantía.</p>
+      </div>
+    </div>
+
+    <div class="benefit">
+      <img src="recursos/rayo.png" alt="">
+      <div>
+        <h4>Compatibilidad total</h4>
+        <p>Funcionan con las principales marcas de vehículos.</p>
+      </div>
+    </div>
+
+    <div class="benefit">
+      <img src="recursos/hoja.png" alt="">
+      <div>
+        <h4>Eficiencia inteligente</h4>
+        <p>Gestiona y optimiza tu carga para ahorrar más.</p>
+      </div>
+    </div>
+
+    <div class="benefit">
+      <img src="recursos/audifonos.png" alt="">
+      <div>
+        <h4>Soporte especializado</h4>
+        <p>Acompañamiento experto antes y después de la instalación.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="cta-left">
+      <img src="recursos/calendario.png" alt="">
+      <div>
+        <h3>¿Listo para dar el siguiente paso?</h3>
+        <p>Te ayudamos a encontrar la solución ideal para ti.</p>
+      </div>
+    </div>
+    <button class="cta-btn" id="OpenForm">Hablemos de tu proyecto →</button>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+      <div class="brand-name">DUO<span>VOLT</span></div>
+      <div class="tagline">Tu energía, nuestra ingeniería</div>
+      <p>Soluciones de energía solar para hogares, empresas y proyectos a gran escala en Colombia.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="energia_solar.html">Energía Solar</a>
+      <a href="movilidad_electrica.html">Movilidad Eléctrica</a>
+      <a href="beneficios_tributarios.html">Beneficios Tributarios</a>
+      <a href="generacion_escala.html">Generación a Gran Escala</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133308" style="color:#94a3b8;text-decoration:none;">+57 312 713 3308</a>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133304" style="color:#94a3b8;text-decoration:none;">+57 312 713 3304</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <path d="M17.5 6.5h.01"/>
+        </svg>
+        <a href="https://www.instagram.com/duovolt11" target="_blank" rel="noopener noreferrer" style="color:#94a3b8;text-decoration:none;">duovolt11</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>contacto@duovolt.co</span>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Colombia</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 DuoVolt. Todos los derechos reservados.</span>
+  </div>
+
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="formModal">
+  <div class="modal-box">
+
+    <button class="close-modal" id="closeForm">×</button>
+
+    <h2>Consulta tu solución</h2>
+    <p>Déjanos tus datos y te ayudamos.</p>
+
+  
+    <form action="guardar_movilidad.php" method="POST">
+
+      <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+      <input type="text"  name="nombre" placeholder="Nombre completo"    required>
+      <input type="email" name="correo" placeholder="Correo electrónico" required>
+      <input type="text"  name="celular"placeholder="Número de celular"  required>
+
+      <select name="Tipo_vivienda" required>
+        <option value="">Tipo de vivienda</option>
+        <option value="Casa">Casa</option>
+        <option value="Apartamento">Apartamento</option>
+        <option value="Edificio">Edificio</option>
+      </select>
+
+      <button type="submit">Quiero mi simulación →</button>
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+
+/* ── DROPDOWN ESCRITORIO ── */
+
+const btn = document.getElementById('svcBtn');
+const dd  = document.getElementById('ddMenu');
+
+btn.addEventListener('click', function(e){
+  e.stopPropagation();
+  const open = dd.classList.contains('visible');
+  dd.classList.toggle('visible', !open);
+  btn.classList.toggle('open', !open);
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.dropdown-wrap')){
+    dd.classList.remove('visible');
+    btn.classList.remove('open');
+  }
+});
+
+/* ── HAMBURGER ── */
+
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', function(){
+  const open = mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', !open);
+  hamburger.classList.toggle('open', !open);
+  document.body.style.overflow = open ? '' : 'hidden';
+});
+
+mobileMenu.querySelectorAll('a').forEach(function(link){
+  link.addEventListener('click', function(){
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ── MODAL ── */
+
+const openForm  = document.getElementById('OpenForm');
+const modal     = document.getElementById('formModal');
+const closeForm = document.getElementById('closeForm');
+
+openForm.addEventListener('click', function(e){
+  e.preventDefault();
+  modal.classList.add('active');
+});
+
+closeForm.addEventListener('click', function(){
+  modal.classList.remove('active');
+});
+
+modal.addEventListener('click', function(e){
+  if(e.target === modal){
+    modal.classList.remove('active');
+  }
+});
+
+</script>
+
+</body>
+</html>

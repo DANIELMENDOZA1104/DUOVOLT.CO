@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoVolt - Nosotros</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f6f9;
+  color:#111827;
+  overflow-x:hidden;
+}
+
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:100;
+  padding:16px 55px;
+  box-sizing:border-box;
+  background:linear-gradient(to bottom, rgba(2,8,23,.96), rgba(2,8,23,.75));
+}
+
+.nav-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo img{
+  height:42px;
+}
+
+/* MENU */
+
+.menu{
+  display:flex;
+  gap:35px;
+  align-items:center;
+}
+
+.menu a{
+  text-decoration:none;
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  transition:.3s;
+}
+
+.menu a:hover,
+.menu .activo{
+  color:#5fd13f;
+}
+
+/* HAMBURGER */
+
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  padding:4px;
+}
+
+.hamburger span{
+  display:block;
+  width:24px;
+  height:2px;
+  background:white;
+  border-radius:2px;
+  transition:.3s;
+}
+
+.hamburger.open span:nth-child(1){
+  transform:translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2){
+  opacity:0;
+}
+
+.hamburger.open span:nth-child(3){
+  transform:translateY(-7px) rotate(-45deg);
+}
+
+/* MOBILE MENU PANEL */
+
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(2,8,23,.98);
+  z-index:99;
+  padding:90px 28px 40px;
+  flex-direction:column;
+  gap:0;
+  overflow-y:auto;
+}
+
+.mobile-menu.open{
+  display:flex;
+}
+
+.mobile-menu a{
+  text-decoration:none;
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+
+.mobile-menu a:hover{
+  color:#5fd13f;
+}
+
+.mobile-menu .mobile-services-title{
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  padding:20px 0 8px;
+}
+
+.mobile-menu .mobile-cta{
+  margin-top:28px;
+  background:#5fd13f;
+  color:white;
+  text-align:center;
+  padding:16px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:700;
+  border-bottom:none;
+}
+
+.mobile-menu .mobile-cta:hover{
+  background:#4cad36;
+  color:white;
+}
+
+/* BOTON NAV */
+
+.btn-nav{
+  background:#5fd13f;
+  color:white;
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn-nav:hover{
+  background:#4cad36;
+}
+
+/* ========================= */
+/* DROPDOWN */
+/* ========================= */
+
+.dropdown-wrap{
+  position:relative;
+}
+
+.dropdown-btn{
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:none;
+  border:none;
+  font-family:Arial,sans-serif;
+  padding:0;
+  transition:.3s;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn.open{
+  color:#5fd13f;
+}
+
+.dropdown-btn .arrow{
+  font-size:10px;
+  display:inline-block;
+  transition:transform .25s;
+}
+
+.dropdown-btn.open .arrow{
+  transform:rotate(180deg);
+}
+
+/* CAJA */
+
+.dropdown{
+  position:absolute;
+  top:calc(100% + 20px);
+  left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  background:white;
+  border-radius:16px;
+  padding:10px;
+  width:340px;
+  box-shadow:0 12px 40px rgba(0,0,0,.15);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+  z-index:999;
+}
+
+.dropdown.visible{
+  opacity:1;
+  pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ITEMS */
+
+.dd-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .15s;
+}
+
+.dd-item:hover{
+  background:#f0faea;
+}
+
+.dd-icon{
+  width:38px;
+  height:38px;
+  background:#eaf7e4;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.dd-icon img{
+  width:22px;
+}
+
+.dd-label{
+  font-size:13px;
+  font-weight:700;
+  color:#111827;
+}
+
+.dd-sub{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  line-height:1.5;
+}
+
+.dd-sep{
+  height:1px;
+  background:#f3f4f6;
+  margin:4px 0;
+}
+
+/* ========================= */
+/* CONTENIDO PRINCIPAL */
+/* ========================= */
+
+.contacto{
+  width:94%;
+  margin:90px auto 36px;
+  display:grid;
+  grid-template-columns:32% 68%;
+  gap:22px;
+  align-items:start;
+}
+
+/* ── LEFT ── */
+
+.contact-left{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.contact-card{
+  background:white;
+  border-radius:24px;
+  padding:30px 28px;
+  box-shadow:0 6px 24px rgba(0,0,0,.05);
+}
+
+.contact-tag{
+  color:#63c53f;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:10px;
+}
+
+.contact-card h1{
+  font-size:38px;
+  line-height:1.1;
+  margin-bottom:14px;
+  font-weight:800;
+}
+
+.verde{ color:#63c53f; }
+
+.contact-card > p{
+  font-size:14px;
+  color:#475569;
+  line-height:1.75;
+}
+
+/* FEATURES */
+
+.features{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.feature{
+  background:#f8faf6;
+  border-radius:14px;
+  padding:16px 14px;
+  text-align:center;
+}
+
+.feature-icon{
+  width:50px;
+  height:50px;
+  margin:0 auto 10px;
+  border-radius:50%;
+  background:#eef8e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#63c53f;
+}
+
+.feature-icon img{
+  width:26px;
+  height:26px;
+}
+
+.feature h3{
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:#111827;
+}
+
+.feature p{
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.4;
+}
+
+/* CTA BUTTON */
+
+.big-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  margin-top:22px;
+  background:#63c53f;
+  color:white;
+  text-decoration:none;
+  padding:16px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:700;
+  transition:.3s;
+}
+
+.big-btn:hover{
+  background:#4dac31;
+}
+
+.bottom-text{
+  margin-top:18px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  color:#334155;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.bottom-text span{
+  color:#63c53f;
+  font-weight:700;
+}
+
+/* ── RIGHT ── */
+
+.contact-right{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* TOP GRID */
+
+.top-grid{
+  display:grid;
+  grid-template-columns:56% 44%;
+  gap:18px;
+}
+
+/* MAP CARD */
+
+.map-card{
+  background:white;
+  border-radius:24px;
+  padding:24px;
+  display:grid;
+  grid-template-columns:55% 45%;
+  align-items:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.05);
+}
+
+.map-left .icon{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#eef8e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  margin-bottom:12px;
+}
+
+.map-left h3{
+  font-size:13px;
+  font-weight:600;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.map-left h2{
+  font-size:26px;
+  line-height:1.15;
+  margin-bottom:12px;
+  font-weight:800;
+}
+
+.map-left .line{
+  width:40px;
+  height:3px;
+  border-radius:20px;
+  background:#63c53f;
+  margin-bottom:14px;
+}
+
+.map-left p{
+  color:#475569;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.map-image img{
+  width:100%;
+}
+
+/* CITY CARD */
+
+.city-card{
+  overflow:hidden;
+  border-radius:24px;
+  display:grid;
+  grid-template-columns:1fr;
+  box-shadow:0 6px 24px rgba(0,0,0,.05);
+}
+
+.city-info{
+  background:white;
+  padding:24px;
+}
+
+.city-info .icon{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#eef8e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  margin-bottom:12px;
+}
+
+.city-info h3{
+  font-size:13px;
+  font-weight:600;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.city-info h2{
+  font-size:24px;
+  line-height:1.15;
+  margin-bottom:12px;
+  font-weight:800;
+}
+
+.city-info .line{
+  width:40px;
+  height:3px;
+  border-radius:20px;
+  background:#63c53f;
+  margin-bottom:14px;
+}
+
+.city-info p{
+  color:#475569;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.city-image{
+  height:160px;
+  overflow:hidden;
+}
+
+.city-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* CONTACT BOXES */
+
+.contact-boxes{
+  background:white;
+  border-radius:24px;
+  padding:24px 26px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  box-shadow:0 6px 24px rgba(0,0,0,.05);
+}
+
+.info-box{
+  padding:8px 16px;
+  border-right:1px solid #e5e7eb;
+}
+
+.info-box:last-child{
+  border-right:none;
+}
+
+.info-icon{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:#eef8e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+}
+
+.info-icon img{
+  width:22px;
+  height:22px;
+}
+
+.info-box h4{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.info-box p{
+  color:#475569;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.mini-btn{
+  display:inline-block;
+  margin-top:12px;
+  border:1.5px solid #63c53f;
+  color:#63c53f;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  transition:.3s;
+}
+
+.mini-btn:hover{
+  background:#63c53f;
+  color:white;
+}
+
+/* CERTIFICADOS */
+
+.certificados{
+  background:white;
+  border-radius:24px;
+  padding:22px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  box-shadow:0 6px 24px rgba(0,0,0,.05);
+}
+
+.cert-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.cert-left .shield{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#eef8e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  flex-shrink:0;
+}
+
+.cert-left h3{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.cert-left p{
+  color:#475569;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.cert-left span{
+  color:#63c53f;
+  font-weight:700;
+}
+
+.cert-logos{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+  flex-shrink:0;
+}
+
+.cert-item{
+  text-align:center;
+}
+
+.cert-item img{
+  height:36px;
+  display:block;
+  margin:0 auto 8px;
+}
+
+.cert-item h4{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.cert-item p{
+  color:#6b7280;
+  font-size:12px;
+}
+
+/* ── FOOTER ── */
+
+.footer{
+  background:#020817;
+  color:#cbd5e1;
+  padding:48px 55px 24px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:36px;
+  border-bottom:1px solid #1e293b;
+}
+
+.footer-brand p{
+  font-size:13px;
+  line-height:1.8;
+  color:#94a3b8;
+  margin-top:14px;
+  max-width:240px;
+}
+
+.footer-brand .brand-name{
+  font-size:20px;
+  font-weight:900;
+  color:white;
+  letter-spacing:1px;
+}
+
+.footer-brand .brand-name span{
+  color:#63c53f;
+}
+
+.footer-brand .tagline{
+  font-size:11px;
+  color:#64748b;
+  margin-top:2px;
+}
+
+.footer-col h4{
+  color:white;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:16px;
+  letter-spacing:.5px;
+}
+
+.footer-col a{
+  display:block;
+  color:#94a3b8;
+  text-decoration:none;
+  font-size:13px;
+  margin-bottom:10px;
+  transition:.2s;
+}
+
+.footer-col a:hover{
+  color:#63c53f;
+}
+
+.footer-col .contact-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:#94a3b8;
+  line-height:1.6;
+}
+
+.footer-col .contact-item svg{
+  flex-shrink:0;
+  margin-top:2px;
+  color:#63c53f;
+}
+
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:22px;
+  font-size:12px;
+  color:#475569;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.footer-bottom a{
+  color:#475569;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.footer-bottom a:hover{
+  color:#63c53f;
+}
+
+.footer-bottom-links{
+  display:flex;
+  gap:22px;
+}
+
+/* MODAL */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,8,23,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9999;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+.modal-box{
+  width:92%;
+  max-width:520px;
+  background:white;
+  border-radius:26px;
+  padding:38px 34px;
+  position:relative;
+
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.close-modal{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  background:#eef2f7;
+  font-size:22px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  padding:0;
+}
+
+.modal-box h2{
+  font-size:34px;
+  color:#0f172a;
+  margin-bottom:12px;
+}
+
+.modal-box p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:28px;
+}
+
+.modal-box form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.modal-box input,
+.modal-box textarea{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:16px;
+  font-size:15px;
+  outline:none;
+}
+
+.modal-box textarea{
+  min-height:130px;
+  resize:none;
+}
+.modal-box select{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:16px;
+  font-size:15px;
+  outline:none;
+  background:white;
+  color:#475569;
+}
+
+.modal-box button[type="submit"]{
+  background:#63c53f;
+  color:white;
+  border:none;
+  border-radius:14px;
+  padding:17px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+/* ======================================================= */
+/* RESPONSIVE                                              */
+/* ======================================================= */
+
+/* TABLET GRANDE (≤1100px) */
+@media(max-width:1100px){
+
+  .navbar{
+    padding:16px 28px;
+  }
+
+  .contacto{
+    grid-template-columns:38% 62%;
+  }
+
+  .contact-card h1{
+    font-size:30px;
+  }
+
+  .contact-boxes{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .info-box:nth-child(2){
+    border-right:none;
+  }
+
+  .info-box:nth-child(3){
+    border-right:1px solid #e5e7eb;
+    border-top:1px solid #e5e7eb;
+    padding-top:20px;
+    margin-top:8px;
+  }
+
+  .info-box:nth-child(4){
+    border-right:none;
+    border-top:1px solid #e5e7eb;
+    padding-top:20px;
+    margin-top:8px;
+  }
+
+  .cert-left h3{
+    font-size:15px;
+  }
+
+  .cert-logos{
+    gap:18px;
+  }
+
+}
+
+/* TABLET (≤900px) */
+@media(max-width:900px){
+
+  /* Navbar */
+  .navbar{
+    padding:14px 20px;
+  }
+
+  .menu,
+  .btn-nav{
+    display:none;
+  }
+
+  .hamburger{
+    display:flex;
+  }
+
+  /* Layout principal — una sola columna */
+  .contacto{
+    grid-template-columns:1fr;
+    margin-top:76px;
+    width:92%;
+  }
+
+  .contact-card h1{
+    font-size:34px;
+  }
+
+  /* Top grid — mapa y ciudad apilados */
+  .top-grid{
+    grid-template-columns:1fr;
+  }
+
+  .map-card{
+    grid-template-columns:55% 45%;
+  }
+
+  /* Certificados apilados */
+  .certificados{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .cert-logos{
+    width:100%;
+    justify-content:space-around;
+  }
+
+  /* Footer */
+  .footer{
+    padding:40px 20px 20px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+}
+
+/* MÓVIL GRANDE (≤640px) */
+@media(max-width:640px){
+
+  .contacto{
+    width:90%;
+    margin-top:72px;
+    gap:16px;
+  }
+
+  .contact-card{
+    padding:24px 20px;
+  }
+
+  .contact-card h1{
+    font-size:28px;
+  }
+
+  .big-btn{
+    font-size:15px;
+    padding:14px;
+  }
+
+  /* Mapa card — apila texto e imagen */
+  .map-card{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  .map-image img{
+    max-width:180px;
+    margin:0 auto;
+    display:block;
+  }
+
+  .map-left h2{
+    font-size:20px;
+  }
+
+  /* Info boxes — 1 columna */
+  .contact-boxes{
+    grid-template-columns:1fr;
+    padding:20px;
+  }
+
+  .info-box{
+    border-right:none !important;
+    border-top:1px solid #e5e7eb;
+    padding:16px 0;
+    margin-top:0;
+  }
+
+  .info-box:first-child{
+    border-top:none;
+    padding-top:0;
+  }
+
+  /* Certificados */
+  .cert-left{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .cert-logos{
+    gap:20px;
+    justify-content:flex-start;
+  }
+
+  /* Footer */
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  /* Modal */
+  .modal-box{
+    padding:28px 20px;
+  }
+
+  .modal-box h2{
+    font-size:26px;
+  }
+
+}
+
+/* MÓVIL PEQUEÑO (≤400px) */
+@media(max-width:400px){
+
+  .contact-card h1{
+    font-size:24px;
+  }
+
+  .features{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .cert-logos{
+    gap:14px;
+  }
+
+  .cert-item h4{
+    font-size:14px;
+  }
+
+}
+
+</style>
+</head>
+<link rel="icon" href="recursos/logo.png">
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="recursos/logo.png" alt="DuoVolt">
+    </div>
+
+    <!-- MENU ESCRITORIO -->
+    <div class="menu">
+
+      <a href="index.html">Inicio</a>
+
+      <!-- DROPDOWN -->
+      <div class="dropdown-wrap">
+
+        <button class="dropdown-btn" id="svcBtn">
+          Servicios <span class="arrow">▼</span>
+        </button>
+
+        <div class="dropdown" id="ddMenu">
+
+          <a class="dd-item" href="energia_solar.html">
+            <div class="dd-icon"><img src="recursos/recurvivienda.png"></div>
+            <div>
+              <div class="dd-label">Energía solar</div>
+              <div class="dd-sub">Reduce tu factura hasta llegar a 0 o generar excedentes.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="movilidad_electrica.html">
+            <div class="dd-icon"><img src="recursos/tienda.png"></div>
+            <div>
+              <div class="dd-label">Movilidad eléctrica</div>
+              <div class="dd-sub">Infraestructura de carga para hogares y empresas.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="beneficios_tributarios.html">
+            <div class="dd-icon"><img src="recursos/autopista.png"></div>
+            <div>
+              <div class="dd-label">Beneficios tributarios</div>
+              <div class="dd-sub">Incentivos y deducciones energéticas.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="generacion_escala.html">
+            <div class="dd-icon"><img src="recursos/estructura.png"></div>
+            <div>
+              <div class="dd-label">Generación a gran escala</div>
+              <div class="dd-sub">Desarrollo de proyectos desde 2 hectáreas.</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <a href="nosotros.html">Nosotros</a>
+
+    </div>
+
+    <a href="https://wa.me/573127133308" target="_blank" class="btn-nav">
+      Escribenos→
+    </a>
+
+    <!-- HAMBURGER (solo móvil) -->
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</header>
+
+<!-- MENÚ MÓVIL -->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <div class="mobile-services-title">SERVICIOS</div>
+  <a href="energia_solar.html">☀️ Energía solar</a>
+  <a href="movilidad_electrica.html">⚡ Movilidad eléctrica</a>
+  <a href="beneficios_tributarios.html">💰 Beneficios tributarios</a>
+  <a href="generacion_escala.html">🏗️ Generación a gran escala</a>
+  <a href="nosotros.html">Nosotros</a>
+  <a href="https://wa.me/573127133308" target="_blank" class="mobile-cta">Escribenos →</a>
+</nav>
+
+<!-- CONTENIDO -->
+
+<section class="contacto">
+
+  <!-- LEFT -->
+  <div class="contact-left">
+    <div class="contact-card">
+
+      <div class="contact-tag">CONTACTO</div>
+
+      <h1>
+        Hablemos de tu
+        <span class="verde">proyecto</span>
+        energético
+      </h1>
+
+      <p>
+        Acompañamos proyectos en todo Colombia
+        en energía solar, movilidad eléctrica
+        y generación a gran escala.
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">
+            <img src="recursos/rayo.png" alt="Energía limpia">
+          </div>
+          <h3>Energía limpia</h3>
+          <p>para hoy y mañana</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><img src="recursos/alcancia.png" alt="Ahorro y eficiencia"></div>
+          <h3>Ahorro y</h3>
+          <p>eficiencia</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><img src="recursos/moneda.png" alt="Valorización"></div>
+          <h3>Valorización</h3>
+          <p>de tu inversión</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><img src="recursos/grafico.png" alt="Sostenibilidad"></div>
+          <h3>Sostenibilidad</h3>
+          <p>que genera futuro</p>
+        </div>
+
+      </div>
+
+      <a href="#" target="_blank" class="big-btn" id="openForm">
+        Cotizar mi proyecto →
+      </a>
+
+      <div class="bottom-text">
+        ⚡
+        <div>
+          Tu energía puede generar
+          <span>ahorro</span>,
+          <span>valorización</span>
+          y
+          <span>sostenibilidad</span>.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="contact-right">
+
+    <!-- MAP + CITY -->
+    <div class="top-grid">
+
+      <div class="map-card">
+        <div class="map-left">
+          <div class="icon">🌎</div>
+          <h3>Cobertura nacional</h3>
+          <h2>Trabajamos en todo <span class="verde">Colombia</span></h2>
+          <div class="line"></div>
+          <p>
+            Desarrollamos proyectos residenciales,
+            comerciales e industriales en diferentes
+            regiones del país.
+          </p>
+        </div>
+        <div class="map-image">
+          <img src="recursos/colombia.png" alt="Colombia">
+        </div>
+      </div>
+
+      <div class="city-card">
+        <div class="city-info">
+          <div class="icon">📍</div>
+          <h3>Sede principal</h3>
+          <h2>Bogotá, <span class="verde">Colombia</span></h2>
+          <div class="line"></div>
+          <p>
+            Desde nuestra sede coordinamos
+            proyectos y acompañamiento técnico
+            a nivel nacional.
+          </p>
+        </div>
+        <div class="city-image">
+          <img src="https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Bogotá">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INFO BOXES -->
+    <div class="contact-boxes">
+
+      <div class="info-box">
+        <div class="info-icon"><img src="recursos/telefono.svg" alt="Teléfono"></div>
+        <h4>Teléfono</h4>
+        <p>(+57) 320 851 3309</p>
+      </div>
+
+      <div class="info-box">
+        <div class="info-icon"><img src="recursos/correo.svg" alt="Correo"></div>
+        <h4>Correo</h4>
+        <p>contacto@duovolt.co</p>
+      </div>
+
+      <div class="info-box">
+        <div class="info-icon"><img src="recursos/whatsapp.svg" alt="WhatsApp"></div>
+        <h4>WhatsApp</h4>
+        <p>(+57) 320 851 3309</p>
+      </div>
+
+      <div class="info-box">
+        <div class="info-icon"><img src="recursos/horario.svg" alt="Horario"></div>
+        <h4>Horario</h4>
+        <p>Lunes a viernes<br>8:00 AM – 6:00 PM</p>
+      </div>
+
+    </div>
+
+    <!-- CERTIFICADOS -->
+    <div class="certificados">
+
+      <div class="cert-left">
+        <div class="shield">🛡️</div>
+        <div>
+          <h3>Ingeniería que genera <span>confianza</span></h3>
+          <p>Cumplimos con RETIE y estándares de calidad en todos nuestros proyectos.</p>
+        </div>
+      </div>
+
+      <div class="cert-logos">
+        <div class="cert-item">
+          <img src="recursos/retie.png" alt="RETIE">
+          <h4>RETIE</h4>
+          <p>Certificación</p>
+        </div>
+        <div class="cert-item">
+          <img src="recursos/iso9001.png" alt="ISO 9001">
+          <h4>ISO 9001</h4>
+          <p>Calidad</p>
+        </div>
+        <div class="cert-item">
+          <img src="recursos/icontec.png" alt="ICONTEC">
+          <h4>ICONTEC</h4>
+          <p>Internacional</p>
+        </div>
+        <div class="cert-item">
+          <img src="recursos/creg.png" alt="CREG">
+          <h4>CREG</h4>
+          <p>Energía y Gas</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+  <div class="footer-grid">
+
+    <!-- Marca -->
+    <div class="footer-brand">
+      <div class="brand-name">DUO<span>VOLT</span></div>
+      <div class="tagline">Tu energía, nuestra ingeniería</div>
+      <p>
+        Soluciones de energía solar para hogares, empresas
+        y proyectos a gran escala en Colombia.
+      </p>
+    </div>
+
+    <!-- Servicios -->
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="energia_solar.html">Energía Solar</a>
+      <a href="movilidad_electrica.html">Movilidad Eléctrica</a>
+      <a href="beneficios_tributarios.html">Beneficios Tributarios</a>
+      <a href="generacion_escala.html">Generación a Gran Escala</a>
+    </div>
+
+    <!-- Empresa -->
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="#">Nosotros</a>
+    </div>
+
+    <!-- Contacto -->
+    <div class="footer-col">
+      <h4>Contacto</h4>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133308" style="color:#94a3b8;text-decoration:none;">+57 312 713 3308</a>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133304" style="color:#94a3b8;text-decoration:none;">+57 312 713 3304</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <path d="M17.5 6.5h.01"/>
+        </svg>
+        <a href="https://www.instagram.com/duovolt11" target="_blank" rel="noopener noreferrer" style="color:#94a3b8;text-decoration:none;">duovolt11</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0 1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>contacto@duovolt.co</span>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Colombia</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 DuoVolt. Todos los derechos reservados.</span>
+  </div>
+
+</footer>
+
+<!-- MODAL -->
+
+<div class="modal-overlay" id="formModal">
+  <div class="modal-box">
+
+    <button class="close-modal" id="closeForm">×</button>
+
+    <h2>Simula tu ahorro</h2>
+    <p>Déjanos tus datos y te ayudamos a llevar tu factura a 0.</p>
+
+    <form
+      action="https://docs.google.com/forms/d/e/1FAIpQLSfyhrBYoJHnsurbQSDDeSZqZhLHUjkXNXVpPD8eS3UY4DCt6g/formResponse"
+      method="POST"
+      target="hidden_iframe">
+
+      <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+      <input type="text"    name="entry.111111111" placeholder="Nombre completo"       required>
+      <input type="email"   name="entry.222222222" placeholder="Correo electrónico"    required>
+      <input type="text"    name="entry.333333333" placeholder="Número de celular">
+     
+      <select 
+          name="entry.666666666"
+          required>
+
+          <option value="">
+            ¿Qué tipo de servicio te interesa?
+          </option>
+
+          <option value="energia_solar">
+            Energía solar
+          </option>
+
+          <option value="movilidad_electrica">
+            Movilidad eléctrica
+          </option>
+
+          <option value="beneficios_tributarios">
+            Beneficios tributarios
+          </option>
+
+          <option value="generacion_escala">
+            Generación a gran escala
+          </option>
+        </select>
+      </select>
+
+      <button type="submit">Quiero mi simulación →</button>
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+
+/* ── DROPDOWN ── */
+
+const btn = document.getElementById('svcBtn');
+const dd  = document.getElementById('ddMenu');
+
+btn.addEventListener('click', function(e){
+  e.stopPropagation();
+  const open = dd.classList.contains('visible');
+  dd.classList.toggle('visible', !open);
+  btn.classList.toggle('open', !open);
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.dropdown-wrap')){
+    dd.classList.remove('visible');
+    btn.classList.remove('open');
+  }
+});
+
+/* ── HAMBURGER ── */
+
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', function(){
+  const open = mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', !open);
+  hamburger.classList.toggle('open', !open);
+  document.body.style.overflow = open ? '' : 'hidden';
+});
+
+/* Cerrar menú móvil al hacer click en un link */
+mobileMenu.querySelectorAll('a').forEach(function(link){
+  link.addEventListener('click', function(){
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ── MODAL ── */
+
+const openForm  = document.getElementById('openForm');
+const modal     = document.getElementById('formModal');
+const closeForm = document.getElementById('closeForm');
+
+openForm.addEventListener('click', function(e){
+  e.preventDefault();
+  modal.classList.add('active');
+});
+
+closeForm.addEventListener('click', function(){
+  modal.classList.remove('active');
+});
+
+modal.addEventListener('click', function(e){
+  if(e.target === modal){
+    modal.classList.remove('active');
+  }
+});
+
+</script>
+
+</body>
+</html>

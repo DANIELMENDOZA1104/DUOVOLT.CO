@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel DuoVolt</title>
+
+<style>
+body{
+    background:#020817;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    color:white;
+}
+
+.card{
+    background:#07101f;
+    padding:40px;
+    border-radius:20px;
+    width:400px;
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:15px 0;
+    border:none;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    background:#5fd13f;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+<link rel="icon" href="recursos/logo.png">
+<div class="card">
+    <h2>Exportar Datos DuoVolt</h2>
+
+    <form action="exportar.php" method="POST">
+        <input
+            type="password"
+            name="clave"
+            placeholder="Contraseña"
+            required>
+
+        <button type="submit">
+            Descargar Reporte
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

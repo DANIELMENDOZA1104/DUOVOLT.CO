@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoVolt - Beneficios Tributarios</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f7fb;
+  color:#111827;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ========================= */
+/* NAVBAR                    */
+/* ========================= */
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+  padding:16px 55px;
+  background:rgba(2,8,23,.95);
+  backdrop-filter:blur(10px);
+}
+
+.nav-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo img{ height:42px; }
+
+.menu{
+  display:flex;
+  gap:35px;
+  align-items:center;
+}
+
+.menu a{
+  text-decoration:none;
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  transition:.3s;
+}
+
+.menu a:hover,
+.menu .activo{ color:#5fd13f; }
+
+.btn-nav{
+  background:#5fd13f;
+  color:white;
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn-nav:hover{ background:#4cad36; }
+
+/* DROPDOWN */
+
+.dropdown-wrap{ position:relative; }
+
+.dropdown-btn{
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:none;
+  border:none;
+  font-family:Arial,sans-serif;
+  padding:0;
+  transition:.3s;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn.open{ color:#5fd13f; }
+
+.dropdown-btn .arrow{
+  font-size:10px;
+  display:inline-block;
+  transition:transform .25s;
+}
+
+.dropdown-btn.open .arrow{ transform:rotate(180deg); }
+
+.dropdown{
+  position:absolute;
+  top:calc(100% + 20px);
+  left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  background:white;
+  border-radius:16px;
+  padding:10px;
+  width:340px;
+  box-shadow:0 12px 40px rgba(0,0,0,.15);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+  z-index:999;
+}
+
+.dropdown.visible{
+  opacity:1;
+  pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+
+.dd-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .15s;
+}
+
+.dd-item:hover{ background:#f0faea; }
+
+.dd-icon{
+  width:38px;
+  height:38px;
+  background:#eaf7e4;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.dd-icon img{ width:22px; }
+
+.dd-label{
+  font-size:13px;
+  font-weight:700;
+  color:#111827;
+}
+
+.dd-sub{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  line-height:1.5;
+}
+
+.dd-sep{
+  height:1px;
+  background:#f3f4f6;
+  margin:4px 0;
+}
+
+/* ========================= */
+/* HAMBURGER                 */
+/* ========================= */
+
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  padding:4px;
+}
+
+.hamburger span{
+  display:block;
+  width:24px;
+  height:2px;
+  background:white;
+  border-radius:2px;
+  transition:.3s;
+}
+
+.hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ========================= */
+/* MENÚ MÓVIL — PANTALLA     */
+/* COMPLETA OSCURA           */
+/* ========================= */
+
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(2,8,23,.98);
+  z-index:99;
+  padding:90px 28px 40px;
+  flex-direction:column;
+  gap:0;
+  overflow-y:auto;
+}
+
+.mobile-menu.open{ display:flex; }
+
+.mobile-menu a{
+  text-decoration:none;
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+
+.mobile-menu a:hover{ color:#5fd13f; }
+
+.mobile-menu .mobile-services-title{
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  padding:20px 0 8px;
+}
+
+.mobile-menu .mobile-cta{
+  margin-top:28px;
+  background:#5fd13f;
+  color:white;
+  text-align:center;
+  padding:16px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:700;
+  border-bottom:none;
+}
+
+.mobile-menu .mobile-cta:hover{
+  background:#4cad36;
+  color:white;
+}
+
+/* ========================= */
+/* MAIN                      */
+/* ========================= */
+
+.main{
+  position:relative;
+  overflow:hidden;
+  flex:1;
+  padding-top:70px;
+}
+
+/* ── HERO ── */
+
+.hero-section{
+  position:relative;
+  min-height:520px;
+  display:flex;
+  align-items:stretch;
+}
+
+.hero-bg{
+  position:absolute;
+  inset:0;
+  width:75%;
+  background:
+    linear-gradient(to right,
+      rgba(245,247,251,0) 20%,
+      rgba(245,247,251,.15) 30%,
+      rgba(245,247,251,.65) 45%,
+      rgba(245,247,251,.96) 70%,
+      #f5f7fb 100%),
+    url('recursos/beneficios.png');
+  background-size:cover;
+  background-position:left center;
+  z-index:0;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  margin-left:50%;
+  width:62%;
+  padding:60px 55px 50px 30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.hero-label{
+  color:#5fd13f;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  margin-bottom:16px;
+}
+
+.hero-title{
+  font-size:44px;
+  line-height:1.07;
+  font-weight:800;
+  color:#111827;
+  margin-bottom:18px;
+  max-width:560px;
+}
+
+.verde{ color:#5fd13f; }
+
+.hero-sub{
+  font-size:15px;
+  color:#475569;
+  line-height:1.75;
+  max-width:470px;
+  margin-bottom:28px;
+}
+
+.hero-sub a{
+  color:#5fd13f;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* Strip info CREG */
+
+.info-strip{
+  display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  border:1.5px solid #dde6d5;
+  border-radius:14px;
+  overflow:hidden;
+  background:white;
+  max-width:580px;
+}
+
+.info-cell{
+  padding:15px 18px;
+  border-right:1px solid #e5e7eb;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.info-cell:last-child{ border-right:none; }
+
+.creg-logo{
+  font-weight:900;
+  font-size:19px;
+  color:#c0392b;
+  letter-spacing:-.5px;
+  margin-bottom:3px;
+}
+
+.creg-sub{
+  font-size:11px;
+  color:#6b7280;
+  line-height:1.4;
+}
+
+.ley-title{
+  font-weight:700;
+  font-size:13px;
+  color:#5fd13f;
+  margin-bottom:4px;
+}
+
+.ley-desc{
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.5;
+  max-width:150px;
+}
+
+.info-icon{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:15px 16px;
+  border-right:1px solid #e5e7eb;
+  text-align:center;
+}
+
+.info-icon:last-child{ border-right:none; }
+
+.info-icon svg{
+  width:32px;
+  height:32px;
+  stroke:#3da82a;
+  fill:none;
+  stroke-width:1.6;
+}
+
+.info-icon span{
+  font-size:11px;
+  color:#6b7280;
+  line-height:1.3;
+}
+
+/* Caja flotante */
+
+.hero-overlay{
+  position:absolute;
+  bottom:38px;
+  left:28px;
+  z-index:3;
+  background:rgba(2,8,23,.90);
+  border-radius:16px;
+  padding:16px 22px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  max-width:272px;
+}
+
+.overlay-coin{
+  width:44px;
+  height:44px;
+  background:rgba(95,209,63,.18);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.overlay-coin svg{
+  width:24px;
+  height:24px;
+  stroke:#5fd13f;
+  fill:none;
+  stroke-width:1.8;
+}
+
+.hero-overlay p{
+  color:white;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.45;
+}
+
+.hero-overlay p span{ color:#5fd13f; }
+
+/* ── 4 BENEFICIOS ── */
+
+.benefits-section{
+  background:#f5f7fb;
+  padding:0 50px 30px;
+}
+
+.section-divider{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:38px 0 30px;
+  color:#5fd13f;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.section-divider::before,
+.section-divider::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:#cde7c1;
+}
+
+.four-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:#e5e7eb;
+  border-radius:16px 16px 0 0;
+  overflow:hidden;
+  border:1px solid #e5e7eb;
+  border-bottom:none;
+}
+
+.benefit-card{
+  background:white;
+  padding:26px 20px 22px;
+}
+
+.bc-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.bc-num{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#5fd13f;
+  color:white;
+  font-size:13px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.bc-icon svg{
+  width:34px;
+  height:34px;
+  stroke:#3da82a;
+  fill:none;
+  stroke-width:1.6;
+}
+
+.bc-title{
+  font-size:14px;
+  font-weight:700;
+  color:#111827;
+  line-height:1.3;
+}
+
+.bc-dash{
+  width:22px;
+  height:3px;
+  background:#5fd13f;
+  border-radius:2px;
+  margin-bottom:10px;
+}
+
+.bc-desc{
+  font-size:13px;
+  color:#4b5563;
+  line-height:1.7;
+}
+
+.bc-desc strong{
+  color:#5fd13f;
+  font-weight:700;
+}
+
+/* Fila resumen */
+
+.summary-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:0 0 16px 16px;
+  overflow:hidden;
+}
+
+.sum-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:20px 16px;
+  border-right:1px solid #e5e7eb;
+}
+
+.sum-item:last-child{ border-right:none; }
+
+.sum-item svg{
+  width:34px;
+  height:34px;
+  stroke:#3da82a;
+  fill:none;
+  stroke-width:1.5;
+  flex-shrink:0;
+}
+
+.sum-item p{
+  font-size:13px;
+  color:#374151;
+  line-height:1.5;
+}
+
+.sum-item p strong{
+  color:#5fd13f;
+  font-weight:700;
+}
+
+/* ── CTA ── */
+
+.cta{
+  margin:28px 50px 50px;
+  background:linear-gradient(to right, #020817, #031427, #020817);
+  border-radius:22px;
+  padding:32px 38px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.cta-left{
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+
+.cta-icon{
+  width:54px;
+  height:54px;
+  background:rgba(95,209,63,.12);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.cta-icon svg{
+  width:26px;
+  height:26px;
+  stroke:#5fd13f;
+  fill:none;
+  stroke-width:1.8;
+}
+
+.cta-left h3{
+  color:white;
+  font-size:22px;
+  margin-bottom:6px;
+}
+
+.cta-left p{
+  color:#d1d5db;
+  font-size:15px;
+}
+
+.cta-btn{
+  border:1px solid #5fd13f;
+  color:#5fd13f;
+  padding:16px 30px;
+  border-radius:14px;
+  text-decoration:none;
+  font-size:15px;
+  font-weight:600;
+  transition:.3s;
+  white-space:nowrap;
+  background:none;
+  cursor:pointer;
+}
+
+.cta-btn:hover{
+  background:#5fd13f;
+  color:#02110a;
+}
+
+/* ── FOOTER ── */
+
+.footer{
+  background:#020817;
+  color:#cbd5e1;
+  padding:48px 55px 24px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:36px;
+  border-bottom:1px solid #1e293b;
+}
+
+.footer-brand p{
+  font-size:13px;
+  line-height:1.8;
+  color:#94a3b8;
+  margin-top:14px;
+  max-width:240px;
+}
+
+.footer-brand .brand-name{
+  font-size:20px;
+  font-weight:900;
+  color:white;
+  letter-spacing:1px;
+}
+
+.footer-brand .brand-name span{ color:#63c53f; }
+
+.footer-brand .tagline{
+  font-size:11px;
+  color:#64748b;
+  margin-top:2px;
+}
+
+.footer-col h4{
+  color:white;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:16px;
+  letter-spacing:.5px;
+}
+
+.footer-col a{
+  display:block;
+  color:#94a3b8;
+  text-decoration:none;
+  font-size:13px;
+  margin-bottom:10px;
+  transition:.2s;
+}
+
+.footer-col a:hover{ color:#63c53f; }
+
+.footer-col .contact-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:#94a3b8;
+  line-height:1.6;
+}
+
+.footer-col .contact-item svg{
+  flex-shrink:0;
+  margin-top:2px;
+  color:#63c53f;
+}
+
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:22px;
+  font-size:12px;
+  color:#475569;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.footer-bottom a{
+  color:#475569;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.footer-bottom a:hover{ color:#63c53f; }
+
+/* MODAL */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,8,23,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9999;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+
+.modal-box{
+  width:92%;
+  max-width:520px;
+  background:white;
+  border-radius:26px;
+  padding:38px 34px;
+  position:relative;
+}
+
+.close-modal{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  background:#eef2f7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.modal-box h2{
+  font-size:34px;
+  color:#0f172a;
+  margin-bottom:12px;
+}
+
+.modal-box p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:28px;
+}
+
+.modal-box form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.modal-box input,
+.modal-box textarea{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:16px;
+  font-size:15px;
+  outline:none;
+}
+
+.modal-box textarea{
+  min-height:130px;
+  resize:none;
+}
+
+.modal-box button[type="submit"]{
+  background:#63c53f;
+  color:white;
+  border:none;
+  border-radius:14px;
+  padding:17px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ======================================================= */
+/* RESPONSIVE                                              */
+/* ======================================================= */
+
+/* TABLET (≤900px) */
+@media(max-width:900px){
+
+  .navbar{ padding:14px 28px; }
+
+  .menu,
+  .btn-nav{ display:none; }
+
+  .hamburger{ display:flex; }
+
+  .main{ padding-top:70px; }
+
+  /* Hero */
+  .hero-section{
+    min-height:auto;
+    flex-direction:column;
+  }
+
+  .hero-bg{
+    position:relative;
+    width:100%;
+    height:220px;
+    inset:auto;
+    background:
+      linear-gradient(to bottom,
+        rgba(245,247,251,0) 30%,
+        #f5f7fb 100%),
+      url('recursos/beneficios.png');
+    background-size:cover;
+    background-position:center top;
+  }
+
+  .hero-overlay{
+    position:relative;
+    bottom:auto;
+    left:auto;
+    margin:0 18px;
+    max-width:100%;
+    margin-top:-20px;
+    border-radius:14px;
+  }
+
+  .hero-content{
+    position:relative;
+    margin-left:0;
+    width:100%;
+    padding:20px 22px 32px;
+  }
+
+  .hero-title{
+    font-size:28px;
+    max-width:100%;
+  }
+
+  .hero-sub{ max-width:100%; }
+
+  .info-strip{
+    grid-template-columns:1fr 1fr;
+    max-width:100%;
+  }
+
+  .info-cell{
+    border-right:none;
+    border-bottom:1px solid #e5e7eb;
+  }
+
+  .info-cell:nth-child(1){ border-right:1px solid #e5e7eb; }
+  .info-cell:nth-child(2){ border-right:none; }
+
+  .info-icon{
+    border-right:none;
+    border-bottom:1px solid #e5e7eb;
+  }
+
+  .info-icon:nth-child(3){ border-right:1px solid #e5e7eb; }
+  .info-icon:last-child{ border-bottom:none; }
+
+  /* Beneficios */
+  .benefits-section{ padding:0 22px 24px; }
+
+  .four-grid{
+    grid-template-columns:1fr;
+    border-radius:16px;
+    border-bottom:1px solid #e5e7eb;
+  }
+
+  .benefit-card{
+    border-bottom:1px solid #e5e7eb;
+  }
+
+  .benefit-card:last-child{ border-bottom:none; }
+
+  /* Summary row */
+  .summary-row{
+    grid-template-columns:1fr 1fr;
+    border-radius:0 0 14px 14px;
+  }
+
+  .sum-item{
+    border-right:none;
+    border-bottom:1px solid #e5e7eb;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+    padding:14px 12px;
+  }
+
+  .sum-item:nth-child(1),
+  .sum-item:nth-child(3){ border-right:1px solid #e5e7eb; }
+
+  .sum-item:nth-child(3),
+  .sum-item:nth-child(4){ border-bottom:none; }
+
+  /* CTA */
+  .cta{
+    margin:18px 22px 40px;
+    flex-direction:column;
+    gap:20px;
+    padding:24px 22px;
+    text-align:center;
+  }
+
+  .cta-left{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .cta-btn{
+    width:100%;
+    text-align:center;
+    padding:14px;
+  }
+
+  /* Footer */
+  .footer{ padding:40px 20px 20px; }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:30px; }
+  .footer-bottom{ flex-direction:column; align-items:flex-start; }
+
+}
+
+/* MÓVIL (≤640px) */
+@media(max-width:640px){
+
+  .navbar{ padding:14px 20px; }
+
+  .hero-title{ font-size:24px; }
+
+  .hero-label{ font-size:11px; }
+
+  .hero-sub{ font-size:13px; }
+
+  .modal-box{ padding:28px 20px; border-radius:20px; }
+  .modal-box h2{ font-size:26px; }
+
+}
+
+/* MÓVIL PEQUEÑO (≤400px) */
+@media(max-width:400px){
+
+  .hero-title{ font-size:21px; }
+
+  .info-strip{ grid-template-columns:1fr; }
+
+  .info-cell,
+  .info-icon{
+    border-right:none !important;
+    border-bottom:1px solid #e5e7eb !important;
+  }
+
+  .info-icon:last-child{ border-bottom:none !important; }
+
+  .footer-grid{ grid-template-columns:1fr; }
+
+}
+
+</style>
+</head>
+<link rel="icon" href="recursos/logo.png">
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="recursos/logo.png" alt="DuoVolt">
+    </div>
+
+    <!-- MENU ESCRITORIO -->
+    <div class="menu">
+      <a href="index.html">Inicio</a>
+
+      <div class="dropdown-wrap">
+        <button class="dropdown-btn" id="svcBtn">
+          Servicios <span class="arrow">▼</span>
+        </button>
+
+        <div class="dropdown" id="ddMenu">
+
+          <a class="dd-item" href="energia_solar.html">
+            <div class="dd-icon"><img src="recursos/vivienda.png"></div>
+            <div>
+              <div class="dd-label">Energía solar</div>
+              <div class="dd-sub">Reduce tu factura hasta llegar a 0 o generar excedentes de energía.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="movilidad_electrica.html">
+            <div class="dd-icon"><img src="recursos/tienda.png"></div>
+            <div>
+              <div class="dd-label">Movilidad eléctrica</div>
+              <div class="dd-sub">Infraestructura de carga para hogares, empresas y parqueaderos.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="beneficios_tributarios.html">
+            <div class="dd-icon"><img src="recursos/autopista.png"></div>
+            <div>
+              <div class="dd-label">Beneficios tributarios</div>
+              <div class="dd-sub">Optimiza tu inversión con incentivos y deducciones energéticas.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="generacion_escala.html">
+            <div class="dd-icon"><img src="recursos/estructura.png"></div>
+            <div>
+              <div class="dd-label">Generación a gran escala</div>
+              <div class="dd-sub">Desarrollo de proyectos energéticos desde 2 hectáreas.</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <a href="https://wa.me/573127133308" target="_blank" class="btn-nav">
+      Escribenos →
+    </a>
+
+    <!-- HAMBURGER -->
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</header>
+
+<!--MÓVIL-->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <div class="mobile-services-title">SERVICIOS</div>
+  <a href="energia_solar.html">☀️ Energía Solar</a>
+  <a href="movilidad_electrica.html">⚡ Movilidad Eléctrica</a>
+  <a href="beneficios_tributarios.html" style="color:#5fd13f;">📋 Beneficios Tributarios</a>
+  <a href="generacion_escala.html">🌿 Generación a Gran Escala</a>
+  <a href="nosotros.html">Nosotros</a>
+  <a href="https://wa.me/573127133308" target="_blank" class="mobile-cta">Escribenos →</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero-section">
+
+    <div class="hero-bg"></div>
+
+    <div class="hero-overlay">
+      <div class="overlay-coin">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v1.5M12 15.5V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 2.5-5 2-5 5 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2"/>
+        </svg>
+      </div>
+      <p>Convierte tu inversión<br>en <span>ahorro real.</span></p>
+    </div>
+
+    <div class="hero-content">
+
+      <div class="hero-label">BENEFICIOS TRIBUTARIOS</div>
+
+      <h1 class="hero-title">
+        En palabras sencillas:<br>
+        tu proyecto puede<br>
+        llegar a <span class="verde">costar la mitad.</span>
+      </h1>
+
+      <p class="hero-sub">
+        La <a href="#">Ley 1715 de 2014</a> te permite acceder a 4 beneficios
+        tributarios por invertir en energías renovables.
+      </p>
+
+      <div class="info-strip">
+
+        <div class="info-cell">
+          <div class="creg-logo">CREG</div>
+          <div class="creg-sub">Comisión de Regulación<br>de Energía y Gas</div>
+        </div>
+
+        <div class="info-cell">
+          <div class="ley-title">Ley 1715 de 2014</div>
+          <div class="ley-desc">Fomenta el desarrollo y uso de fuentes no convencionales de energía renovable.</div>
+        </div>
+
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="7" width="9" height="6" rx="1"/>
+            <rect x="13" y="7" width="9" height="6" rx="1"/>
+            <rect x="2" y="14" width="9" height="6" rx="1"/>
+            <rect x="13" y="14" width="9" height="6" rx="1"/>
+            <path d="M12 4v3M12 17v3M4 5l1.5 1.5M20 5l-1.5 1.5"/>
+          </svg>
+          <span>Energía<br>solar</span>
+        </div>
+
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="1" y="6" width="14" height="10" rx="2"/>
+            <path d="M15 9h3l3 3v4h-6V9z"/>
+            <circle cx="5.5" cy="18" r="2"/>
+            <circle cx="17.5" cy="18" r="2"/>
+          </svg>
+          <span>Movilidad<br>eléctrica</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 4 BENEFICIOS -->
+  <section class="benefits-section">
+
+    <div class="section-divider">
+      Los 4 beneficios tributarios que puedes solicitar
+    </div>
+
+    <div class="four-grid">
+
+      <div class="benefit-card">
+        <div class="bc-top">
+          <div class="bc-num">1</div>
+          <div class="bc-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v1.5M12 15.5V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 2.5-5 2-5 5 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2"/>
+            </svg>
+          </div>
+          <div class="bc-title">Deducción de renta<br>por inversión</div>
+        </div>
+        <div class="bc-dash"></div>
+        <p class="bc-desc">Deduce <strong>hasta el 50%</strong> de la inversión realizada en el proyecto del impuesto sobre la renta.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="bc-top">
+          <div class="bc-num">2</div>
+          <div class="bc-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="3"/>
+              <path d="M16 14h2M2 11h20M7 7V5M17 7V5"/>
+            </svg>
+          </div>
+          <div class="bc-title">Exclusión<br>de IVA</div>
+        </div>
+        <div class="bc-dash"></div>
+        <p class="bc-desc">Te pueden devolver el <strong>5% del IVA</strong> en la compra de equipos, materiales e insumos del proyecto.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="bc-top">
+          <div class="bc-num">3</div>
+          <div class="bc-icon">
+            <svg viewBox="0 0 24 24">
+              <polyline points="3 20 8 13 13 16 21 5"/>
+              <polyline points="17 5 21 5 21 9"/>
+            </svg>
+          </div>
+          <div class="bc-title">Depreciación<br>acelerada</div>
+        </div>
+        <div class="bc-dash"></div>
+        <p class="bc-desc">Deprecia hasta el <strong>20% anual</strong> de la inversión en activos asociados al proyecto.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="bc-top">
+          <div class="bc-num">4</div>
+          <div class="bc-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <path d="M7 8h10M7 12h10M7 16h6"/>
+              <path d="M17 14l3 3M19 14h3v3"/>
+            </svg>
+          </div>
+          <div class="bc-title">Exclusión<br>de aranceles</div>
+        </div>
+        <div class="bc-dash"></div>
+        <p class="bc-desc">Exclusión de <strong>aranceles</strong> para la importación de equipos y tecnología no fabricados en el país.</p>
+      </div>
+
+    </div>
+
+    <!-- FILA RESUMEN -->
+    <div class="summary-row">
+
+      <div class="sum-item">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v1.5M12 15.5V17M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 2.5-5 2-5 5 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2"/>
+        </svg>
+        <p>Tu carro puede llegar a <strong>costar la mitad.</strong></p>
+      </div>
+
+      <div class="sum-item">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="7" width="20" height="14" rx="3"/>
+          <path d="M16 14h2M2 11h20"/>
+        </svg>
+        <p>Te pueden devolver el <strong>5% del IVA</strong> de tu carro y más.</p>
+      </div>
+
+      <div class="sum-item">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/>
+          <path d="M8 12s1.5-3 4-3 4 3 4 3-1.5 3-4 3-4-3-4-3z"/>
+        </svg>
+        <p>Aportas al planeta con <strong>energía limpia.</strong></p>
+      </div>
+
+      <div class="sum-item">
+        <svg viewBox="0 0 24 24">
+          <polyline points="3 17 8 12 13 15 21 6"/>
+          <polyline points="17 6 21 6 21 10"/>
+        </svg>
+        <p><strong>Más ahorro,</strong> más competitividad y mayor retorno de inversión.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <div class="cta">
+
+    <div class="cta-left">
+      <div class="cta-icon">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+      <div>
+        <h3>¿Tienes dudas sobre los beneficios tributarios?</h3>
+        <p>Nuestros especialistas te asesoran para que aproveches al máximo la Ley 1715.</p>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="OpenForm">Hablemos de tu proyecto →</button>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+      <div class="brand-name">DUO<span>VOLT</span></div>
+      <div class="tagline">Tu energía, nuestra ingeniería</div>
+      <p>Soluciones de energía solar para hogares, empresas y proyectos a gran escala en Colombia.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="energia_solar.html">Energía Solar</a>
+      <a href="movilidad_electrica.html">Movilidad Eléctrica</a>
+      <a href="beneficios_tributarios.html">Beneficios Tributarios</a>
+      <a href="generacion_escala.html">Generación a Gran Escala</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133308" style="color:#94a3b8;text-decoration:none;">+57 312 713 3308</a>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133304" style="color:#94a3b8;text-decoration:none;">+57 312 713 3304</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <path d="M17.5 6.5h.01"/>
+        </svg>
+        <a href="https://www.instagram.com/duovolt11" target="_blank" rel="noopener noreferrer" style="color:#94a3b8;text-decoration:none;">duovolt11</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>contacto@duovolt.co</span>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Colombia</span> #cambios
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 DuoVolt. Todos los derechos reservados.</span>
+  </div>
+
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="formModal">
+  <div class="modal-box">
+
+    <button class="close-modal" id="closeForm">×</button>
+
+    <h2>Conoce tus beneficios</h2>
+    <p>Déjanos tus datos y te ayudamos a conocer tus beneficios.</p>
+
+   
+    <form action="guardar_beneficiostributarios.php" method="POST">
+
+
+      <input 
+      type="text"  
+      name="nombre" 
+      placeholder="Nombre completo"     
+      required>
+      <input 
+      type="email" 
+      name="correo" 
+      placeholder="Correo electrónico"  required>
+      <input 
+      type="text" 
+      name="celular" 
+      placeholder="Número de celular">
+      <input 
+      type="text" 
+      name="marca" 
+      placeholder="Marca de tu vehículo">
+      <input 
+      type="date" 
+      name="fecha" 
+      placeholder="fecha de factura del vehículo">
+
+      <button type="submit">Quiero mi simulación →</button>
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+
+/* ── DROPDOWN ESCRITORIO ── */
+
+const btn = document.getElementById('svcBtn');
+const dd  = document.getElementById('ddMenu');
+
+btn.addEventListener('click', function(e){
+  e.stopPropagation();
+  const open = dd.classList.contains('visible');
+  dd.classList.toggle('visible', !open);
+  btn.classList.toggle('open', !open);
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.dropdown-wrap')){
+    dd.classList.remove('visible');
+    btn.classList.remove('open');
+  }
+});
+
+/* ── HAMBURGER ── */
+
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', function(){
+  const open = mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', !open);
+  hamburger.classList.toggle('open', !open);
+  document.body.style.overflow = open ? '' : 'hidden';
+});
+
+mobileMenu.querySelectorAll('a').forEach(function(link){
+  link.addEventListener('click', function(){
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ── MODAL ── */
+
+const openForm  = document.getElementById('OpenForm');
+const modal     = document.getElementById('formModal');
+const closeForm = document.getElementById('closeForm');
+
+openForm.addEventListener('click', function(e){
+  e.preventDefault();
+  modal.classList.add('active');
+});
+
+closeForm.addEventListener('click', function(){
+  modal.classList.remove('active');
+});
+
+modal.addEventListener('click', function(e){
+  if(e.target === modal){
+    modal.classList.remove('active');
+  }
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoVolt - Energía Solar</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#eef2f7;
+  color:#111827;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.main{ flex:1; }
+
+/* ========================= */
+/* NAVBAR                    */
+/* ========================= */
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+  padding:16px 55px;
+  background:rgba(2,8,23,.92);
+  backdrop-filter:blur(10px);
+}
+
+.nav-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo img{ height:42px; }
+
+.menu{
+  display:flex;
+  gap:35px;
+  align-items:center;
+}
+
+.menu a{
+  text-decoration:none;
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  transition:.3s;
+}
+
+.menu a:hover,
+.menu .activo{ color:#5fd13f; }
+
+.btn-nav{
+  background:#5fd13f;
+  color:white;
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn-nav:hover{ background:#4cad36; }
+
+/* DROPDOWN */
+
+.dropdown-wrap{ position:relative; }
+
+.dropdown-btn{
+  color:white;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:none;
+  border:none;
+  font-family:Arial,sans-serif;
+  transition:.3s;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn.open{ color:#5fd13f; }
+
+.dropdown-btn .arrow-dd{
+  font-size:10px;
+  transition:.3s;
+}
+
+.dropdown-btn.open .arrow-dd{ transform:rotate(180deg); }
+
+.dropdown{
+  position:absolute;
+  top:calc(100% + 18px);
+  left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  width:340px;
+  background:white;
+  border-radius:18px;
+  padding:10px;
+  box-shadow:0 20px 45px rgba(0,0,0,.18);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+  z-index:999;
+}
+
+.dropdown.visible{
+  opacity:1;
+  pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+
+.dd-item{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  padding:14px;
+  border-radius:14px;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.dd-item:hover{ background:#f0faea; }
+
+.dd-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:#eef8ea;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.dd-icon img{ width:22px; }
+
+.dd-label{
+  font-size:13px;
+  font-weight:700;
+  color:#111827;
+  margin-bottom:4px;
+}
+
+.dd-sub{
+  font-size:12px;
+  color:#64748b;
+  line-height:1.5;
+}
+
+.dd-sep{
+  height:1px;
+  background:#edf2f7;
+  margin:4px 0;
+}
+
+/* ========================= */
+/* HAMBURGER                 */
+/* ========================= */
+
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  background:none;
+  border:none;
+  padding:4px;
+}
+
+.hamburger span{
+  display:block;
+  width:24px;
+  height:2px;
+  background:white;
+  border-radius:2px;
+  transition:.3s;
+}
+
+.hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ========================= */
+/* MENÚ MÓVIL PANTALLA       */
+/* COMPLETA OSCURA           */
+/* ========================= */
+
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(2,8,23,.98);
+  z-index:99;
+  padding:90px 28px 40px;
+  flex-direction:column;
+  gap:0;
+  overflow-y:auto;
+}
+
+.mobile-menu.open{ display:flex; }
+
+.mobile-menu a{
+  text-decoration:none;
+  color:white;
+  font-size:18px;
+  font-weight:600;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+
+.mobile-menu a:hover{ color:#5fd13f; }
+
+.mobile-menu .mobile-services-title{
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  padding:20px 0 8px;
+}
+
+.mobile-menu .mobile-cta{
+  margin-top:28px;
+  background:#5fd13f;
+  color:white;
+  text-align:center;
+  padding:16px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:700;
+  border-bottom:none;
+}
+
+.mobile-menu .mobile-cta:hover{
+  background:#4cad36;
+  color:white;
+}
+
+/* ========================= */
+/* IMAGEN MÓVIL              */
+/* (oculta en escritorio)    */
+/* ========================= */
+
+.hero-img-wrap{ display:none; }
+
+/* ========================= */
+/* HERO (escritorio)         */
+/* ========================= */
+
+.hero{
+  position:relative;
+  min-height:760px;
+  overflow:hidden;
+  padding:140px 55px 0;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to right,
+    rgba(255,255,255,.97) 0%,
+    rgba(255,255,255,.94) 24%,
+    rgba(255,255,255,.82) 38%,
+    rgba(255,255,255,.05) 70%),
+    url("recursos/fondo_energiasolar.png");
+  background-size:cover;
+  background-position:center;
+  z-index:-1;
+}
+
+.hero-text{ max-width:500px; }
+
+.hero-tag{
+  color:#58c73d;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  margin-bottom:14px;
+}
+
+.hero h1{
+  font-size:40px;
+  line-height:1.08;
+  color:#0f172a;
+  margin-bottom:10px;
+  font-weight:800;
+}
+
+.verde{ color:#58c73d; }
+
+.hero p{
+  font-size:14px;
+  line-height:1.8;
+  color:#334155;
+  max-width:500px;
+}
+
+/* FEATURES */
+
+.features{
+  display:flex;
+  gap:38px;
+  margin-top:38px;
+}
+
+.feature{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.feature img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+}
+
+.feature span{
+  color:#1e293b;
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* FACTURA BOX */
+
+.factura-box{
+  position:absolute;
+  right:100px;
+  top:42%;
+  transform:translateY(-50%);
+  width:430px;
+  background:#020817;
+  border-radius:22px;
+  padding:26px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+}
+
+.factura-side{ width:40%; }
+
+.badge{
+  display:inline-block;
+  background:#1e293b;
+  color:white;
+  padding:6px 12px;
+  border-radius:8px;
+  font-size:11px;
+  margin-bottom:15px;
+}
+
+.badge.green{ background:#5fd13f; }
+
+.factura-title{
+  color:white;
+  font-size:15px;
+  margin-bottom:14px;
+}
+
+.factura-label{
+  color:#94a3b8;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.factura-price{
+  font-size:35px;
+  font-weight:800;
+  color:white;
+}
+
+.factura-green{ color:#5fd13f; }
+
+.arrow{
+  color:#5fd13f;
+  font-size:42px;
+}
+
+/* EXCEDENTES */
+
+.excedentes{
+  position:absolute;
+  right:-70px;
+  top:50%;
+  transform:translateY(-50%);
+  width:105px;
+  height:105px;
+  background:#07101f;
+  border:2px solid #5fd13f;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  box-shadow:0 0 20px rgba(95,209,63,.25);
+}
+
+.excedentes img{
+  width:30px;
+  margin-bottom:8px;
+}
+
+.excedentes p{
+  color:white;
+  font-size:12px;
+  line-height:1.3;
+}
+
+/* BOTTOM BAR */
+
+.bottom-bar{
+  position:absolute;
+  bottom:45px;
+  left:50%;
+  transform:translateX(-50%);
+  width:91%;
+  background:#04111f;
+  border-radius:22px;
+  padding:24px 30px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 25px 50px rgba(0,0,0,.3);
+}
+
+.bottom-left{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.bottom-left img{ width:70px; }
+
+.bottom-info h3{
+  color:white;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.bottom-info .consumo{
+  color:#5fd13f;
+  font-size:42px;
+  font-weight:800;
+}
+
+.bottom-info p{
+  color:white;
+  font-size:15px;
+}
+
+.bottom-beneficios{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.bottom-beneficios span{
+  color:white;
+  font-size:13px;
+}
+
+.bottom-beneficios span::before{
+  content:"✔";
+  color:#5fd13f;
+  margin-right:8px;
+}
+
+.bottom-right{ text-align:center; }
+
+.bottom-right small{
+  color:white;
+  font-size:13px;
+  display:block;
+  margin-bottom:15px;
+}
+
+.btn-bottom{
+  display:inline-block;
+  background:#5fd13f;
+  color:white;
+  text-decoration:none;
+  padding:14px 24px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+}
+
+/* BENEFICIOS */
+
+.beneficios{
+  width:91%;
+  margin:auto;
+  margin-top:30px;
+  margin-bottom:50px;
+  background:white;
+  border-radius:22px;
+  padding:30px 25px;
+  display:flex;
+  justify-content:space-between;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+.beneficio{
+  width:23%;
+  display:flex;
+  gap:14px;
+  position:relative;
+}
+
+.beneficio:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  right:-12px;
+  top:0;
+  width:1px;
+  height:100%;
+  background:#dbe2ea;
+}
+
+.beneficio img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+}
+
+.beneficio h3{
+  font-size:13px;
+  color:#111827;
+  margin-bottom:8px;
+  line-height:1.4;
+}
+
+.beneficio p{
+  font-size:12px;
+  color:#475569;
+  line-height:1.6;
+}
+
+/* ========================= */
+/* MODAL                     */
+/* ========================= */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,8,23,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9999;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+
+.modal-box{
+  width:92%;
+  max-width:520px;
+  background:white;
+  border-radius:26px;
+  padding:38px 34px;
+  position:relative;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.close-modal{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  background:#eef2f7;
+  font-size:22px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  padding:0;
+}
+
+.modal-box h2{
+  font-size:34px;
+  color:#0f172a;
+  margin-bottom:12px;
+}
+
+.modal-box p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:28px;
+}
+
+.modal-box form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:16px;
+  font-size:15px;
+  outline:none;
+  background:white;
+  color:#475569;
+}
+
+.modal-box textarea{
+  min-height:130px;
+  resize:none;
+}
+
+.modal-box button[type="submit"]{
+  background:#63c53f;
+  color:white;
+  border:none;
+  border-radius:14px;
+  padding:17px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ── FOOTER ── */
+
+.footer{
+  background:#020817;
+  color:#cbd5e1;
+  padding:48px 55px 24px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:36px;
+  border-bottom:1px solid #1e293b;
+}
+
+.footer-brand p{
+  font-size:13px;
+  line-height:1.8;
+  color:#94a3b8;
+  margin-top:14px;
+  max-width:240px;
+}
+
+.footer-brand .brand-name{
+  font-size:20px;
+  font-weight:900;
+  color:white;
+  letter-spacing:1px;
+}
+
+.footer-brand .brand-name span{ color:#63c53f; }
+
+.footer-brand .tagline{
+  font-size:11px;
+  color:#64748b;
+  margin-top:2px;
+}
+
+.footer-col h4{
+  color:white;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:16px;
+  letter-spacing:.5px;
+}
+
+.footer-col a{
+  display:block;
+  color:#94a3b8;
+  text-decoration:none;
+  font-size:13px;
+  margin-bottom:10px;
+  transition:.2s;
+}
+
+.footer-col a:hover{ color:#63c53f; }
+
+.footer-col .contact-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:#94a3b8;
+  line-height:1.6;
+}
+
+.footer-col .contact-item svg{
+  flex-shrink:0;
+  margin-top:2px;
+  color:#63c53f;
+}
+
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:22px;
+  font-size:12px;
+  color:#475569;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.footer-bottom a{
+  color:#475569;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.footer-bottom a:hover{ color:#63c53f; }
+
+/* ======================================================= */
+/* RESPONSIVE                                              */
+/* ======================================================= */
+
+/* TABLET (≤900px) */
+@media(max-width:900px){
+
+  .navbar{ padding:14px 28px; }
+
+  .menu,
+  .btn-nav{ display:none; }
+
+  .hamburger{ display:flex; }
+
+  /* ── IMAGEN MÓVIL ── */
+
+  .hero-img-wrap{
+    display:block;
+    position:relative;
+    width:100%;
+    height:260px;
+    overflow:hidden;
+    margin-top:70px; /* compensa navbar fija */
+  }
+
+  .hero-img-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+    display:block;
+  }
+
+  /* Degradado hacia #eef2f7 (color de fondo de esta página) */
+  .hero-img-wrap::after{
+    content:'';
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:130px;
+    background:linear-gradient(to bottom, transparent 0%, #eef2f7 100%);
+    pointer-events:none;
+  }
+
+  /* ── HERO ESCRITORIO → apagado ── */
+
+  .hero{
+    min-height:auto;
+    padding:20px 22px 24px;
+    overflow:visible;
+  }
+
+  /* Ocultar imagen de fondo CSS */
+  .hero::before{
+    display:none;
+  }
+
+  .hero-text{ max-width:100%; }
+
+  .hero h1{
+    font-size:28px;
+    line-height:1.2;
+  }
+
+  .features{
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+  }
+
+  /* FACTURA BOX */
+
+  .factura-box{
+    position:relative;
+    top:auto;
+    right:auto;
+    transform:none;
+    width:100%;
+    max-width:100%;
+    margin-top:24px;
+    padding:20px 18px;
+    border-radius:18px;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .factura-side{
+    width:42%;
+    min-width:130px;
+  }
+
+  .factura-price{ font-size:28px; }
+
+  .factura-title{ font-size:12px; margin-bottom:8px; }
+
+  .arrow{ font-size:28px; align-self:center; }
+
+  /* Excedentes */
+
+  .excedentes{
+    position:relative;
+    right:auto;
+    top:auto;
+    transform:none;
+    width:90px;
+    height:90px;
+    margin:8px auto 0;
+  }
+
+  /* BOTTOM BAR */
+
+  .bottom-bar{
+    position:relative;
+    bottom:auto;
+    left:auto;
+    transform:none;
+    width:100%;
+    flex-direction:column;
+    gap:20px;
+    border-radius:18px;
+    padding:22px 18px;
+    margin-top:16px;
+    text-align:center;
+    align-items:center;
+  }
+
+  .bottom-left{
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    text-align:center;
+  }
+
+  .bottom-left img{ width:50px; }
+
+  .bottom-info h3{ font-size:12px; }
+  .bottom-info .consumo{ font-size:32px; }
+  .bottom-info p{ font-size:13px; }
+
+  .bottom-beneficios{
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .bottom-beneficios span{
+    background:rgba(95,209,63,.08);
+    border:1px solid rgba(95,209,63,.25);
+    color:#86efac;
+    font-size:11px;
+    padding:5px 10px;
+    border-radius:6px;
+  }
+
+  .bottom-beneficios span::before{ display:none; }
+
+  .bottom-right small{ font-size:12px; margin-bottom:10px; }
+
+  .btn-bottom{
+    width:100%;
+    text-align:center;
+    padding:14px;
+    font-size:14px;
+    border-radius:12px;
+  }
+
+  /* BENEFICIOS */
+
+  .beneficios{
+    width:calc(100% - 44px);
+    margin:16px auto 32px;
+    flex-direction:column;
+    gap:20px;
+    padding:22px 18px;
+    border-radius:18px;
+  }
+
+  .beneficio{ width:100%; }
+
+  .beneficio::after{ display:none !important; }
+
+  /* Footer */
+
+  .footer{ padding:40px 20px 20px; }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:30px; }
+  .footer-bottom{ flex-direction:column; align-items:flex-start; }
+
+}
+
+/* MÓVIL (≤640px) */
+@media(max-width:640px){
+
+  .navbar{ padding:14px 20px; }
+
+  .hero-img-wrap{ height:220px; }
+
+  .hero{ padding:16px 18px 20px; }
+
+  .hero h1{ font-size:24px; }
+
+  .hero-tag{ font-size:11px; }
+
+  .hero p{ font-size:13px; }
+
+  .feature{
+    background:#f0fde4;
+    border:1px solid #bbf7a0;
+    border-radius:20px;
+    padding:7px 12px;
+    gap:7px;
+  }
+
+  .feature img{ width:18px; height:18px; }
+
+  .feature span{
+    font-size:12px;
+    color:#166534;
+    white-space:nowrap;
+    line-height:1.2;
+  }
+
+  .modal-box{ padding:28px 20px; border-radius:20px; }
+  .modal-box h2{ font-size:26px; }
+
+}
+
+/* MÓVIL PEQUEÑO (≤400px) */
+@media(max-width:400px){
+
+  .hero h1{ font-size:21px; }
+
+  .factura-side{ width:100%; text-align:center; }
+
+  .arrow{ width:100%; text-align:center; }
+
+  .footer-grid{ grid-template-columns:1fr; }
+
+}
+
+</style>
+</head>
+<link rel="icon" href="recursos/logo.png">
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="recursos/logo.png" alt="DuoVolt">
+    </div>
+
+    <!-- MENU ESCRITORIO -->
+    <div class="menu">
+      <a href="index.html">Inicio</a>
+
+      <div class="dropdown-wrap">
+        <button class="dropdown-btn" id="svcBtn">
+          Servicios <span class="arrow-dd">▼</span>
+        </button>
+
+        <div class="dropdown" id="ddMenu">
+
+          <a class="dd-item" href="energia_solar.html">
+            <div class="dd-icon"><img src="recursos/vivienda.png"></div>
+            <div>
+              <div class="dd-label">Energía Solar</div>
+              <div class="dd-sub">Reduce tu factura hasta llegar a 0.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="movilidad_electrica.html">
+            <div class="dd-icon"><img src="recursos/tienda.png"></div>
+            <div>
+              <div class="dd-label">Movilidad Eléctrica</div>
+              <div class="dd-sub">Infraestructura de carga inteligente.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="beneficios_tributarios.html">
+            <div class="dd-icon"><img src="recursos/autopista.png"></div>
+            <div>
+              <div class="dd-label">Beneficios Tributarios</div>
+              <div class="dd-sub">Incentivos y deducciones energéticas.</div>
+            </div>
+          </a>
+
+          <div class="dd-sep"></div>
+
+          <a class="dd-item" href="generacion_escala.html">
+            <div class="dd-icon"><img src="recursos/estructura.png"></div>
+            <div>
+              <div class="dd-label">Generacion a Gran Escala</div>
+              <div class="dd-sub">Proyectos energéticos desde 2 hectáreas.</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <a href="https://wa.me/573127133308" target="_blank" class="btn-nav">
+      Escribenos →
+    </a>
+
+    <!-- HAMBURGER -->
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</header>
+
+<!--MÓVIL-->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <div class="mobile-services-title">SERVICIOS</div>
+  <a href="energia_solar.html" style="color:#5fd13f;">☀️ Energía Solar</a>
+  <a href="movilidad_electrica.html">⚡ Movilidad Eléctrica</a>
+  <a href="beneficios_tributarios.html">📋 Beneficios Tributarios</a>
+  <a href="generacion_escala.html">🌿 Generación a Gran Escala</a>
+  <a href="nosotros.html">Nosotros</a>
+  <a href="https://wa.me/573127133308" target="_blank" class="mobile-cta">Escribenos →</a>
+</nav>
+
+<!-- IMAGEN MÓVIL con fade (solo visible en móvil/tablet) -->
+<div class="hero-img-wrap">
+  <img src="recursos/fondo_energiasolar.png" alt="Energía solar DuoVolt">
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-text">
+
+      <div class="hero-tag">ENERGÍA SOLAR RESIDENCIAL</div>
+
+      <h1>
+        Tu factura de energía
+        puede <span class="verde">llegar a 0</span>
+        o incluso ser
+        <span class="verde">negativa</span>
+      </h1>
+
+      <p>
+        Instalamos sistemas solares residenciales y comerciales
+        que te permiten generar tu propia energía,
+        reducir costos y protegerte de las alzas en la tarifa.
+      </p>
+
+      <div class="features">
+        <div class="feature">
+          <img src="recursos/rayo.png" alt="">
+          <span>Ahorra desde<br>el primer mes</span>
+        </div>
+        <div class="feature">
+          <img src="recursos/escudo2.png" alt="">
+          <span>Energía limpia<br>e inagotable</span>
+        </div>
+        <div class="feature">
+          <img src="recursos/grafico.png" alt="">
+          <span>Inversión<br>inteligente</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FACTURA -->
+    <div class="factura-box">
+
+      <div class="factura-side">
+        <div class="badge">Antes</div>
+        <div class="factura-title">Tu factura de energía</div>
+        <div class="factura-label">Total a pagar</div>
+        <div class="factura-price">$478.600</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="factura-side">
+        <div class="badge green">Después</div>
+        <div class="factura-title">Tu factura de energía</div>
+        <div class="factura-label">Total a pagar</div>
+        <div class="factura-price factura-green">$0</div>
+      </div>
+
+      <div class="excedentes">
+        <img src="recursos/moneda.png" alt="">
+        <p>Excedentes<br>a tu favor</p>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
+
+      <div class="bottom-left">
+        <img src="recursos/casa2.png" alt="">
+        <div class="bottom-info">
+          <h3>Sistemas solares desde consumos de</h3>
+          <div class="consumo">180 kWh/mes</div>
+          <p>O desde $150.000/mes*</p>
+        </div>
+      </div>
+
+      <div class="bottom-beneficios">
+        <span>Financiación disponible</span>
+        <span>Retorno de inversión atractivo</span>
+        <span>Equipos de alta eficiencia</span>
+        <span>Instalación profesional</span>
+      </div>
+
+      <div class="bottom-right">
+        <small>Simula tu ahorro en 1 minuto</small>
+        <button class="btn-bottom" id="openForm">
+          Quiero mi factura en 0 →
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="beneficios">
+
+    <div class="beneficio">
+      <img src="recursos/alcancia.png" alt="">
+      <div>
+        <h3>Ahorra desde el primer mes</h3>
+        <p>Reduce tu factura hasta llegar a 0.</p>
+      </div>
+    </div>
+
+    <div class="beneficio">
+      <img src="recursos/escudo.png" alt="">
+      <div>
+        <h3>Protege tu hogar</h3>
+        <p>Energía confiable incluso ante cortes o alzas de tarifa.</p>
+      </div>
+    </div>
+
+    <div class="beneficio">
+      <img src="recursos/ecosistema.png" alt="">
+      <div>
+        <h3>Energía limpia</h3>
+        <p>Disminuye tu huella de carbono y contribuye al planeta.</p>
+      </div>
+    </div>
+
+    <div class="beneficio">
+      <img src="recursos/casa.png" alt="">
+      <div>
+        <h3>Aumenta el valor de tu propiedad</h3>
+        <p>Una inversión que mejora tu hogar y tu futuro.</p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+      <div class="brand-name">DUO<span>VOLT</span></div>
+      <div class="tagline">Tu energía, nuestra ingeniería</div>
+      <p>Soluciones de energía solar para hogares, empresas y proyectos a gran escala en Colombia.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="energia_solar.html">Energía Solar</a>
+      <a href="movilidad_electrica.html">Movilidad Eléctrica</a>
+      <a href="beneficios_tributarios.html">Beneficios Tributarios</a>
+      <a href="generacion_escala.html">Generación a Gran Escala</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="nosotros.html">Nosotros</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133308" style="color:#94a3b8;text-decoration:none;">+57 312 713 3308</a>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+        <a href="https://wa.me/573127133304" style="color:#94a3b8;text-decoration:none;">+57 312 713 3304</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <path d="M17.5 6.5h.01"/>
+        </svg>
+        <a href="https://www.instagram.com/duovolt11" target="_blank" rel="noopener noreferrer" style="color:#94a3b8;text-decoration:none;">duovolt11</a>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>contacto@duovolt.co</span>
+      </div>
+
+      <div class="contact-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Colombia</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 DuoVolt. Todos los derechos reservados.</span>
+  </div>
+
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="formModal">
+  <div class="modal-box">
+
+    <button class="close-modal" id="closeForm">×</button>
+
+    <h2>Simula tu ahorro</h2>
+    <p>Déjanos tus datos y te ayudamos a llevar tu factura a 0.</p>
+
+    <form action="guardar_energiasolar.php" method="POST">
+
+        <input type="text" name="nombre" placeholder="Nombre completo" required>
+
+        <input type="email" name="correo" placeholder="Correo electrónico" required>
+
+        <input type="text" name="celular" placeholder="Número de celular" required>
+
+        <input type="text" name="ciudad" placeholder="Ciudad" required>
+
+        <select name="tipo_proyecto" required>
+          <option value="">Tipo de proyecto</option>
+          <option value="Casa">Casa</option>
+          <option value="Comercio">Comercio</option>
+          <option value="Industria">Industria</option>
+        </select>
+
+
+  <input type="text" name="consumo" placeholder="Valor promedio de consumo mensual" required>
+
+  <button type="submit">Quiero mi simulación →</button>
+
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+
+/* ── DROPDOWN ESCRITORIO ── */
+
+const svcBtn = document.getElementById('svcBtn');
+const ddMenu = document.getElementById('ddMenu');
+
+svcBtn.addEventListener('click', function(e){
+  e.stopPropagation();
+  const open = ddMenu.classList.contains('visible');
+  ddMenu.classList.toggle('visible', !open);
+  svcBtn.classList.toggle('open', !open);
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.dropdown-wrap')){
+    ddMenu.classList.remove('visible');
+    svcBtn.classList.remove('open');
+  }
+});
+
+/* ── HAMBURGER ── */
+
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', function(){
+  const open = mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', !open);
+  hamburger.classList.toggle('open', !open);
+  document.body.style.overflow = open ? '' : 'hidden';
+});
+
+mobileMenu.querySelectorAll('a').forEach(function(link){
+  link.addEventListener('click', function(){
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ── MODAL ── */
+
+const openBtn  = document.getElementById('openForm');
+const closeBtn = document.getElementById('closeForm');
+const modal    = document.getElementById('formModal');
+
+openBtn.addEventListener('click', function(e){
+  e.preventDefault();
+  modal.classList.add('active');
+});
+
+closeBtn.addEventListener('click', function(){
+  modal.classList.remove('active');
+});
+
+modal.addEventListener('click', function(e){
+  if(e.target === modal){
+    modal.classList.remove('active');
+  }
+});
+
+</script>
+
+</body>
+</html>
